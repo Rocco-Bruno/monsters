@@ -139,7 +139,7 @@ animaciones.rojoadulto.imagen.src = "assets/png/mounstruos/red/rojo-joven.png";
 animaciones.azulhuevo.imagen.src = "";
 animaciones.azulbebe.imagen.src = "";
 //Amarillo
-animaciones.amarillohuevo.imagen.src = "";
+animaciones.amarillohuevo.imagen.src = "assets/png/mounstruos/yellow/amarillo-huevo.png";
 animaciones.amarillobebe.imagen.src = "assets/png/mounstruos/yellow/yellow-bebe.png";
 //Verde
 animaciones.verdehuevo.imagen.src = "";
@@ -152,7 +152,7 @@ animaciones.rosahuevo.imagen.src = "";
 animaciones.rosabebe.imagen.src = "";
 //Blanco
 animaciones.blancohuevo.imagen.src = "";
-animaciones.blancobebe.imagen.src = "";
+animaciones.blancobebe.imagen.src = "assets/png/mounstruos/white/blanco-bebe.png";
 //Negro
 animaciones.negrohuevo.imagen.src = "";
 animaciones.negrobebe.imagen.src = "";
