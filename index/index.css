@@ -1,0 +1,377 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #17162b;
+    color: #ffffff;
+    font-family: "Courier New", monospace;
+}
+
+/*---header---*/
+
+header {
+    width: 100%;
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #201f39;
+    border-bottom: 3px solid #5145a5;
+}
+
+.logo {
+    color: #f9d849;
+    font-size: 23px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    color: #d7d4ed;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #f9d849;
+}
+
+/*---inicio---*/
+
+.inicio {
+    min-height: 570px;
+    padding: 70px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    background: radial-gradient(circle at 75% 50%, #39316c, #17162b 65%);
+}
+
+.contenido {
+    max-width: 550px;
+}
+
+.subtitulo {
+    color: #f9d849;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.inicio h1 {
+    font-size: clamp(38px, 5vw, 65px);
+    line-height: 1.1;
+    color: #ffffff;
+    text-shadow: 4px 4px #5145a5;
+    margin-bottom: 25px;
+}
+
+.descripcion {
+    color: #c5c2dd;
+    line-height: 1.8;
+    max-width: 430px;
+    margin-bottom: 30px;
+}
+
+.boton {
+    display: inline-block;
+    padding: 16px 22px;
+    background: #f9d849;
+    color: #201f39;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 5px solid #b18c24;
+    transition: 0.2s;
+}
+
+.boton:hover {
+    background: #ffffff;
+    transform: translateY(-3px);
+}
+
+.criatura-principal {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #29254c;
+    border: 4px solid #5145a5;
+    box-shadow: 12px 12px #100f20;
+}
+
+.criatura-principal img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/*---mounstros---*/
+
+.monstruos {
+    padding: 80px 8%;
+}
+
+.encabezado {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+h2 {
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+.encabezado > p:last-child {
+    color: #bcb9d6;
+}
+
+.contenedor-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.tarjeta {
+    padding: 22px 16px;
+    text-align: center;
+    background: #24223f;
+    border: 3px solid #39365e;
+    transition: 0.3s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-8px);
+    border-color: #f9d849;
+}
+
+.imagen-monstruo {
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.imagen-monstruo img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    transition: 0.3s;
+}
+
+.tarjeta:hover img {
+    transform: scale(1.08);
+}
+
+.verde .imagen-monstruo {
+    background: #204d3b;
+}
+
+.dorado .imagen-monstruo {
+    background: #66501b;
+}
+
+.hielo .imagen-monstruo {
+    background: #244e69;
+}
+
+.blanco .imagen-monstruo {
+    background: #49465c;
+}
+
+.tarjeta h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.tarjeta p {
+    color: #bcb9d6;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.rareza {
+    display: inline-block;
+    padding: 7px 12px;
+    color: #f9d849;
+    border: 1px solid #6c5b27;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/*---huevos---*/
+
+.huevos {
+    padding: 70px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    background: #211f3a;
+}
+
+.texto-huevos {
+    max-width: 470px;
+}
+
+.texto-huevos h2 {
+    color: #ffffff;
+}
+
+.texto-huevos > p:not(.subtitulo) {
+    color: #bcb9d6;
+    line-height: 1.8;
+    margin-bottom: 28px;
+}
+
+.boton-claro {
+    background: #ffffff;
+    border-bottom-color: #a7a3c1;
+}
+
+.contenedor-huevos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.huevo {
+    width: 85px;
+    height: 110px;
+    border-radius: 50% 50% 45% 45%;
+    border: 4px solid #ffffff80;
+    box-shadow: inset -12px -8px #00000025;
+    transition: 0.3s;
+}
+
+.huevo:hover {
+    transform: translateY(-12px) rotate(5deg);
+}
+
+.huevo-verde {
+    background: #55bd78;
+}
+
+.huevo-dorado {
+    background: #f9d849;
+}
+
+.huevo-azul {
+    background: #54b9e8;
+}
+
+/*---coleccion---*/
+
+.coleccion {
+    padding: 85px 20px;
+    text-align: center;
+    background: radial-gradient(circle, #39316c, #17162b 75%);
+}
+
+.coleccion h2 {
+    margin-bottom: 20px;
+}
+
+.coleccion > p:not(.subtitulo) {
+    color: #c5c2dd;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/*---footer---*/
+
+footer {
+    padding: 30px 20px;
+    text-align: center;
+    background: #100f20;
+    border-top: 3px solid #5145a5;
+}
+
+footer .logo {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+footer p {
+    color: #9995b8;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+/*---reponsive---*/
+
+@media (max-width: 1000px) {
+    .contenedor-tarjetas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .criatura-principal {
+        width: 240px;
+        height: 240px;
+    }
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .inicio {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 7%;
+    }
+
+    .descripcion {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .criatura-principal {
+        width: 220px;
+        height: 220px;
+    }
+
+    .contenedor-tarjetas {
+        grid-template-columns: 1fr;
+    }
+
+    .huevos {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
+}
