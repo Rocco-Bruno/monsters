@@ -15,7 +15,7 @@ body {
     font-family: "Courier New", monospace;
 }
 
-/*---header---*/
+/*--- HEADER ---*/
 
 header {
     width: 100%;
@@ -23,6 +23,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row-reverse;
     background: #201f39;
     border-bottom: 3px solid #5145a5;
 }
@@ -50,7 +51,7 @@ nav a:hover {
     color: #f9d849;
 }
 
-/*---inicio---*/
+/*--- INICIO ---*/
 
 .inicio {
     min-height: 570px;
@@ -124,7 +125,7 @@ nav a:hover {
     image-rendering: pixelated;
 }
 
-/*---mounstros---*/
+/*--- MONSTRUOS ---*/
 
 .monstruos {
     padding: 80px 8%;
@@ -220,7 +221,7 @@ h2 {
     font-weight: bold;
 }
 
-/*---huevos---*/
+/*--- HUEVOS ---*/
 
 .huevos {
     padding: 70px 10%;
@@ -283,7 +284,7 @@ h2 {
     background: #54b9e8;
 }
 
-/*---coleccion---*/
+/*--- COLECCION ---*/
 
 .coleccion {
     padding: 85px 20px;
@@ -301,7 +302,7 @@ h2 {
     margin-bottom: 30px;
 }
 
-/*---footer---*/
+/*--- FOOTER ---*/
 
 footer {
     padding: 30px 20px;
@@ -321,7 +322,7 @@ footer p {
     letter-spacing: 2px;
 }
 
-/*---reponsive---*/
+/*--- RESPONSIVE ---*/
 
 @media (max-width: 1000px) {
     .contenedor-tarjetas {

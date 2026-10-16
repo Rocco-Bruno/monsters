@@ -1,0 +1,300 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #17162b;
+    color: #f2efff;
+    font-family: "Courier New", monospace;
+}
+
+/*---header---*/
+
+header {
+    width: 100%;
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    background: #201f39;
+    border-bottom: 3px solid #5145a5;
+    gap: 20px;
+}
+
+header h1 {
+    color: #f9d849;
+    font-size: 23px;
+    order: 2;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    order: 1;
+}
+
+nav a {
+    color: #f2efff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+nav a:hover,
+nav a.activo {
+    color: #f9d849;
+}
+/*---presentacion---*/
+
+.presentacion {
+    text-align: center;
+    padding: 70px 20px 45px;
+}
+
+.etiqueta {
+    color: #f9d849;
+    font-size: 12px;
+    letter-spacing: 4px;
+    margin-bottom: 18px;
+}
+
+.presentacion h2 {
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.presentacion p:last-child {
+    color: #bcb9d5;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/*---tarjetas de mounstros---*/
+
+.monstruos {
+    width: 84%;
+    max-width: 1200px;
+    margin: 20px auto 80px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.tarjeta {
+    background: #201f39;
+    border: 2px solid #39365d;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-8px);
+    border-color: #f9d849;
+    box-shadow: 0 10px 25px #00000040;
+}
+
+/*---imagenes---*/
+
+.imagen {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #292747;
+    border-bottom: 2px solid #39365d;
+}
+
+.imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    transition: 0.3s;
+}
+
+.tarjeta:hover .imagen img {
+    transform: scale(1.08);
+}
+
+.monstruo-verde {
+    background: #253c37;
+}
+
+.monstruo-dorado {
+    background: #49402a;
+}
+
+.monstruo-hielo {
+    background: #293d52;
+}
+
+.monstruo-blanco {
+    background: #3c3b50;
+}
+
+/*---información---*/
+
+.informacion {
+    padding: 22px 18px;
+}
+
+.rareza {
+    display: inline-block;
+    padding: 6px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.comun {
+    background: #315b49;
+    color: #8ff0b7;
+}
+
+.legendario {
+    background: #5b4a19;
+    color: #ffe16b;
+}
+
+.raro {
+    background: #254d71;
+    color: #8fd7ff;
+}
+
+.especial {
+    background: #514078;
+    color: #d6baff;
+}
+
+.informacion h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.informacion p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bcb9d5;
+    min-height: 66px;
+}
+
+.datos {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #39365d;
+}
+
+.datos span {
+    color: #f9d849;
+    font-size: 10px;
+}
+
+/*---mensaje final---*/
+
+.mensaje-final {
+    margin: 0 auto 70px;
+    width: 84%;
+    padding: 45px 20px;
+    text-align: center;
+    background: #201f39;
+    border: 2px solid #5145a5;
+    border-radius: 12px;
+}
+
+.mensaje-final h2 {
+    color: #f9d849;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.mensaje-final p {
+    color: #bcb9d5;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.mensaje-final a {
+    display: inline-block;
+    background: #f9d849;
+    color: #17162b;
+    padding: 14px 22px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.mensaje-final a:hover {
+    background: #ffffff;
+    transform: scale(1.04);
+}
+
+/*---footer---*/
+
+footer {
+    text-align: center;
+    padding: 25px 15px;
+    background: #201f39;
+    border-top: 2px solid #5145a5;
+    color: #bcb9d5;
+    font-size: 12px;
+}
+
+/*---responsive---*/
+
+@media (max-width: 1000px) {
+    .monstruos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 18px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    .presentacion h2 {
+        font-size: 27px;
+    }
+
+    .monstruos {
+        width: 90%;
+        grid-template-columns: 1fr;
+    }
+
+    .imagen {
+        height: 250px;
+    }
+
+    .mensaje-final {
+        width: 90%;
+    }
+
+    .mensaje-final h2 {
+        font-size: 21px;
+    }
+}
