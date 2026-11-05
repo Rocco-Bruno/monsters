@@ -140,3 +140,78 @@ body {
     margin: 0 auto 6px;
     object-fit: contain;
 }
+
+/*---misiones (a la derecha, a mitad de altura)---*/
+
+.misiones {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#boton-misiones.hay-premio {
+    background: #f9d849;
+    color: #201f39;
+    border-color: #b18c24;
+}
+
+#lista-misiones {
+    display: none;
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 14px;
+    background: #24223f;
+    color: #ffffff;
+    border: 3px solid #5145a5;
+}
+
+#lista-misiones.abierto {
+    display: block;
+}
+
+#lista-misiones h2 {
+    color: #f9d849;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.mision {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #201f39;
+    border: 2px solid #39365e;
+    font-size: 14px;
+}
+
+.mision p {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.mision span {
+    color: #c5c2dd;
+    margin-right: 10px;
+}
+
+.mision button {
+    display: block;
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #f9d849;
+    color: #201f39;
+    border: 2px solid #b18c24;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*las misiones ya cobradas se ven apagadas*/
+.mision.reclamada {
+    opacity: 0.4;
+}

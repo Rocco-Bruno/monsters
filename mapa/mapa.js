@@ -3,11 +3,11 @@
 let estructuras = [
     { nombre: "Granja", imagen: "../estructuras/granja.png", ancho: 120 },
     { nombre: "Incubadora", imagen: "../estructuras/incubadora.png", ancho: 150 },
-    { nombre: "Reservados", imagen: "../estructuras/reservados.png", ancho: 260 },
+    { nombre: "Reservados", imagen: "../estructuras/reservados.png", ancho: 120 },
 ];
 
 //recursos del jugador
-let recursos = { oro: 500, comida: 200, gemas: 10 };
+let recursos = { oro: 500, comida: 200, gemas: 5000 };
 
 function mostrarRecursos() {
     document.getElementById("oro").textContent = recursos.oro;
@@ -44,6 +44,7 @@ function elegirEstructura(estructura) {
     fantasma.src = estructura.imagen;
     fantasma.style.width = estructura.ancho + "px";
     fantasma.className = "estructura fantasma";
+    fantasma.dataset.nombre = estructura.nombre;
     fantasma.style.left = "-1000px"; //escondido hasta que se mueva el mouse
     mapa.appendChild(fantasma);
     menu.classList.remove("abierto");
@@ -73,6 +74,9 @@ let pasoZoom = 1.1;    //cuanto cambia con cada movimiento de la rueda
 
 //con la rueda del mouse se hace zoom solo en el mapa (los botones y recursos no cambian)
 window.addEventListener("wheel", function (evento) {
+    if (evento.target.closest(".misiones")) {
+        return; //sobre el panel de misiones la rueda baja la lista en vez de hacer zoom
+    }
     evento.preventDefault(); //para que la rueda no mueva la pagina
     let punto = puntoEnElMapa(evento); //el punto del mapa que esta debajo del mouse
 
@@ -140,6 +144,12 @@ mapa.onclick = function (evento) {
         }
         fantasma.className = "estructura";
         fantasma.style.zIndex = parseInt(fantasma.style.top); //las de mas abajo se dibujan adelante
+
+        //avisamos a las misiones (misiones.js)
+        sumarProgreso("estructuras");
+        if (fantasma.dataset.nombre === "Incubadora") {
+            sumarProgreso("incubadoras");
+        }
         fantasma = null;
     }
 };
