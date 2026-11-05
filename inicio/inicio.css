@@ -44,12 +44,12 @@
     background: #5145a5;
 }
 
-.boton-play {
+#boton-play {
     background: #f9d849;
     color: #201f39;
     border-color: #b18c24;
 }
 
-.boton-play:hover {
+#boton-play:hover {
     background: #ffffff;
 }

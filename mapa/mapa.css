@@ -1,0 +1,142 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #8fca33;
+    font-family: "Courier New", monospace;
+}
+
+/*---mapa---*/
+
+#mapa {
+    position: relative;
+    width: 1200px;
+    height: 902px;
+    margin: 0 auto;
+    background: url("../assets/png/mapa/mapa.png");
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+}
+
+/*las estructuras se centran en el punto donde se hizo click*/
+.estructura {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.fantasma {
+    opacity: 0.6;
+    z-index: 10000;
+}
+
+/*afuera del rombo no se puede construir*/
+.fantasma.bloqueado {
+    filter: grayscale(1) drop-shadow(0 0 6px #ff0000) drop-shadow(0 0 6px #ff0000);
+}
+
+/*---perfil y recursos---*/
+
+.perfil {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 20000;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9d849;
+    border: 3px solid #b18c24;
+    border-bottom-width: 7px;
+    font-size: 32px;
+    text-decoration: none;
+}
+
+.perfil:hover {
+    background: #ffffff;
+}
+
+.recursos {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20000;
+    display: flex;
+    gap: 10px;
+}
+
+.recurso {
+    min-width: 120px;
+    padding: 10px 14px;
+    background: #201f39;
+    color: #f9d849;
+    border: 3px solid #100f20;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/*---barra de herramientas---*/
+
+.barra {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 20000;
+}
+
+.boton {
+    padding: 14px;
+    background: #201f39;
+    color: #ffffff;
+    border: 3px solid #100f20;
+    border-bottom-width: 7px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background: #5145a5;
+}
+
+#menu-estructuras {
+    display: none;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#menu-estructuras.abierto {
+    display: flex;
+}
+
+#menu-estructuras button {
+    width: 110px;
+    padding: 8px;
+    background: #24223f;
+    color: #ffffff;
+    border: 3px solid #39365e;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#menu-estructuras button:hover {
+    border-color: #f9d849;
+}
+
+#menu-estructuras img {
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 6px;
+    object-fit: contain;
+}
