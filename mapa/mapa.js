@@ -31,7 +31,7 @@ let estructuras = [
         mejoraBase: 100, mejoraMultiplicador: 1.8, nivelMaximo: 10,
     },
     {
-        nombre: "Hábitat", imagen: "../estructuras/habitat.png", ancho: 200,
+        nombre: "Hábitat", imagen: "../estructuras/habitat_terminado.png", ancho: 200,
         info: "El hogar de tus dragones: ellos generan oro. Cada hábitat es de una calidad y solo pueden vivir ahí los dragones de esa misma calidad.",
         precio: 250, primeraGratis: true,
         produce: "oro",
