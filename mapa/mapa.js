@@ -1,22 +1,80 @@
 //estructuras que se pueden construir
 
 //info = lo que se muestra al hacer click en la estructura
-//oroPorSegundo y maximoOro solo los usa la granja (CAMBIÁ ACÁ cuanto produce)
+//=== PRECIOS: CAMBIÁ ACÁ cuanto oro cuesta cada estructura ===
+//primeraGratis = la primera que construyas no cuesta nada, las siguientes cuestan "precio"
+//maximo = cuantas se pueden construir como mucho (si no tiene, no hay límite)
+//
+//=== PRODUCCIÓN Y MEJORAS: CAMBIÁ ACÁ (ver produccion.js) ===
+//produce = que recurso junta ("comida" la granja, "oro" el hábitat)
+//produccionBase / produccionPorNivel = cuanto da por segundo a nivel 1 / cuanto suma cada nivel (solo granja,
+//    el hábitat produce lo que generan sus dragones, ver "calidades" en monstruos.js)
+//maximoBase / maximoPorNivel = cuanto puede guardar antes de llenarse a nivel 1 / cuanto suma cada nivel
+//capacidadBase / capacidadPorNivel = cuantos dragones entran a nivel 1 / cuantos lugares suma cada nivel (solo hábitat)
+//mejoraBase = cuanto oro cuesta mejorar de nivel 1 a 2; mejoraMultiplicador = cada mejora cuesta esto por la anterior
+//nivelMaximo = hasta que nivel se puede mejorar
 let estructuras = [
     {
-        nombre: "Granja", imagen: "../estructuras/granja.png", ancho: 120,
-        info: "Produce oro con el paso del tiempo. El oro se va guardando hasta llegar al máximo, así que pasá seguido a reclamarlo.",
-        oroPorSegundo: 1, maximoOro: 300,
+        nombre: "Incubadora", imagen: "../estructuras/incubadora.png", ancho: 150,
+        info: "Acá se ponen los huevos para que eclosionen. Cuando el tiempo termina, reclamá al dragón y va a tu inventario. Mejorándola podés incubar más huevos al mismo tiempo.",
+        precio: 0, primeraGratis: true, maximo: 1, //es gratis y solo se puede tener una
+        capacidadBase: 1, capacidadPorNivel: 1, //huevos a la vez: 1 a nivel 1, 2 a nivel 2...
+        mejoraBase: 200, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
-        nombre: "Incubadora", imagen: "../estructuras/incubadora.png", ancho: 150,
-        info: "Acá se ponen los huevos para que eclosionen.",
+        nombre: "Granja", imagen: "../estructuras/granja.png", ancho: 120,
+        info: "Produce comida para mejorar a tus dragones. Se va guardando hasta llegar al máximo, así que pasá seguido a reclamarla.",
+        precio: 100, primeraGratis: true,
+        produce: "comida",
+        produccionBase: 1, produccionPorNivel: 1,
+        maximoBase: 100, maximoPorNivel: 100,
+        mejoraBase: 100, mejoraMultiplicador: 1.8, nivelMaximo: 10,
+    },
+    {
+        nombre: "Hábitat", imagen: "../estructuras/habitat.png", ancho: 200,
+        info: "El hogar de tus dragones: ellos generan oro. Cada hábitat es de una calidad y solo pueden vivir ahí los dragones de esa misma calidad.",
+        precio: 250, primeraGratis: true,
+        produce: "oro",
+        maximoBase: 200, maximoPorNivel: 200,
+        capacidadBase: 2, capacidadPorNivel: 1,
+        mejoraBase: 150, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
         nombre: "Reservados", imagen: "../estructuras/reservados.png", ancho: 120,
-        info: "Guarda a los monstruos que no están en ningún hábitat.",
+        info: "Acá se cruzan dos dragones para conseguir uno nuevo.",
+        //todavia no tiene mejoras (no tiene mejoraBase)
+        precio: 150, //esta nunca es gratis
     },
 ];
+
+//cuantas estructuras de ese tipo hay construidas
+function cantidadConstruidas(estructura) {
+    return construidas.filter(function (c) { return c.tipo === estructura; }).length;
+}
+
+//lo que cuesta ahora (la primera es gratis si tiene primeraGratis)
+function precioActual(estructura) {
+    if (estructura.primeraGratis && cantidadConstruidas(estructura) === 0) {
+        return 0;
+    }
+    return estructura.precio;
+}
+
+//devuelve por que no se puede comprar (o null si se puede)
+function motivoNoSePuede(estructura) {
+    if (estructura.maximo && cantidadConstruidas(estructura) >= estructura.maximo) {
+        return "Ya construida";
+    }
+    if (recursos.oro < precioActual(estructura)) {
+        return "Falta oro";
+    }
+    return null;
+}
+
+function textoPrecio(estructura) {
+    let precio = precioActual(estructura);
+    return precio === 0 ? "Gratis" : "🪙 " + precio;
+}
 
 //las estructuras que ya se construyeron en el mapa
 let construidas = [];
@@ -28,23 +86,38 @@ function mostrarRecursos() {
     document.getElementById("oro").textContent = recursos.oro;
     document.getElementById("comida").textContent = recursos.comida;
     document.getElementById("gemas").textContent = recursos.gemas;
+    actualizarMenu(); //con mas o menos oro cambia lo que se puede comprar
 }
-
-mostrarRecursos();
 
 let mapa = document.getElementById("mapa");
 let menu = document.getElementById("menu-estructuras");
 let fantasma = null; //la estructura que sigue al mouse antes de construirla
 
-//armamos un boton por cada estructura
+//armamos un boton por cada estructura (con su precio abajo)
 for (let estructura of estructuras) {
     let boton = document.createElement("button");
-    boton.innerHTML = '<img src="' + estructura.imagen + '">' + estructura.nombre;
+    boton.innerHTML = '<img src="' + estructura.imagen + '">' + estructura.nombre
+        + '<span class="precio"></span>';
     boton.onclick = function () {
         elegirEstructura(estructura);
     };
+    estructura.boton = boton;
     menu.appendChild(boton);
 }
+
+//pone el precio en cada boton y apaga los que no se pueden comprar
+function actualizarMenu() {
+    for (let estructura of estructuras) {
+        let motivo = motivoNoSePuede(estructura);
+        let precio = estructura.boton.querySelector(".precio");
+        precio.textContent = motivo === "Ya construida" ? "Ya construida" : textoPrecio(estructura);
+        precio.classList.toggle("gratis", precioActual(estructura) === 0 && !motivo);
+        estructura.boton.disabled = motivo !== null;
+        estructura.boton.title = motivo || "";
+    }
+}
+
+mostrarRecursos();
 
 //abrir y cerrar el menu de estructuras
 document.getElementById("boton-herramientas").onclick = function () {
@@ -52,6 +125,9 @@ document.getElementById("boton-herramientas").onclick = function () {
 };
 
 function elegirEstructura(estructura) {
+    if (motivoNoSePuede(estructura)) {
+        return;
+    }
     if (fantasma) {
         fantasma.remove();
     }
@@ -75,11 +151,41 @@ function dentroDelRombo(x, y) {
     return distanciaX + distanciaY <= 1;
 }
 
+//alto de la estructura en el mapa (segun el tamaño real de su imagen)
+function altoDe(imagen, ancho) {
+    if (!imagen.naturalWidth) {
+        return ancho; //si la imagen todavia no cargo la tomamos cuadrada
+    }
+    return ancho * imagen.naturalHeight / imagen.naturalWidth;
+}
+
+//dos estructuras se pisan si sus rombos se tocan
+//(como el mapa es isometrico usamos rombos en vez de rectangulos, asi se pueden poner mas juntas)
+//CAMBIÁ ACÁ el 0.85 si queres que se puedan poner mas pegadas (mas chico) o mas separadas (mas grande)
+let separacion = 0.85;
+function sePisan(x1, y1, ancho1, alto1, x2, y2, ancho2, alto2) {
+    let distanciaX = Math.abs(x1 - x2) / ((ancho1 + ancho2) / 2 * separacion);
+    let distanciaY = Math.abs(y1 - y2) / ((alto1 + alto2) / 2 * separacion);
+    return distanciaX + distanciaY < 1;
+}
+
 //se puede construir si los 4 bordes de la estructura quedan adentro del rombo
+//y no queda encima de otra estructura
 function sePuedeConstruir(x, y) {
-    let mitad = parseInt(fantasma.style.width) / 2;
-    return dentroDelRombo(x - mitad, y) && dentroDelRombo(x + mitad, y)
+    let ancho = parseInt(fantasma.style.width);
+    let alto = altoDe(fantasma, ancho);
+    let mitad = ancho / 2;
+    let adentro = dentroDelRombo(x - mitad, y) && dentroDelRombo(x + mitad, y)
         && dentroDelRombo(x, y - mitad) && dentroDelRombo(x, y + mitad);
+    if (!adentro) {
+        return false;
+    }
+    for (let otra of construidas) {
+        if (sePisan(x, y, ancho, alto, otra.x, otra.y, otra.tipo.ancho, altoDe(otra.imagen, otra.tipo.ancho))) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //=== ZOOM: CAMBIÁ ACÁ los límites y la velocidad ===
@@ -90,7 +196,7 @@ let pasoZoom = 1.1;    //cuanto cambia con cada movimiento de la rueda
 
 //con la rueda del mouse se hace zoom solo en el mapa (los botones y recursos no cambian)
 window.addEventListener("wheel", function (evento) {
-    if (evento.target.closest(".misiones")) {
+    if (evento.target.closest(".misiones, #seleccion, #ventana-fondo")) {
         return; //sobre el panel de misiones la rueda baja la lista en vez de hacer zoom
     }
     evento.preventDefault(); //para que la rueda no mueva la pagina
@@ -151,37 +257,66 @@ mapa.onmousemove = function (evento) {
         let y = punto.y;
         fantasma.style.left = x + "px";
         fantasma.style.top = y + "px";
-        //si esta afuera del rombo se pone en rojo
+        //si esta afuera del rombo o encima de otra estructura se pone en rojo
         fantasma.classList.toggle("bloqueado", !sePuedeConstruir(x, y));
     }
 };
 
-//al hacer click en el mapa se construye
+//pone una estructura en el mapa (se usa al construir y al cargar la partida guardada)
+//extra = datos que se guardan con la estructura (oro de la granja, huevo de la incubadora, monstruos del habitat)
+function ponerEstructura(tipo, x, y, extra, imagen) {
+    if (!imagen) {
+        imagen = document.createElement("img");
+        imagen.src = tipo.imagen;
+        imagen.style.width = tipo.ancho + "px";
+        mapa.appendChild(imagen);
+    }
+    imagen.className = "estructura";
+    imagen.style.left = x + "px";
+    imagen.style.top = y + "px";
+    imagen.style.zIndex = Math.round(y); //las de mas abajo se dibujan adelante
+
+    //la guardamos en la lista de construidas y al hacerle click se abre su info
+    //nivel = nivel de mejora, guardado = comida/oro juntado sin reclamar, ultimoCalculo = desde cuando se cuenta
+    let construida = {
+        tipo: tipo, imagen: imagen, x: x, y: y,
+        nivel: 1, guardado: 0, ultimoCalculo: Date.now(),
+        huevos: [], monstruos: [], calidad: null, //huevos: los que se estan incubando { color, fin }
+    };
+    Object.assign(construida, extra);
+    construidas.push(construida);
+    imagen.onclick = function (evento) {
+        if (!fantasma && !seMovio) {
+            evento.stopPropagation();
+            seleccionar(construida); //interfaz.js
+        }
+    };
+    dibujarMarcador(construida); //el huevo o los monstruos que se ven arriba (monstruos.js)
+    return construida;
+}
+
+//al hacer click en el mapa se construye (o, si no se esta construyendo, se deselecciona la estructura)
 mapa.onclick = function (evento) {
+    if (!fantasma && !seMovio) {
+        deseleccionar(); //interfaz.js
+    }
     if (fantasma) {
         mapa.onmousemove(evento);
-        if (fantasma.classList.contains("bloqueado")) {
-            return; //afuera del rombo no se construye
+        let tipo = fantasma.datos;
+        if (fantasma.classList.contains("bloqueado") || motivoNoSePuede(tipo)) {
+            return; //afuera del rombo, encima de otra o sin oro no se construye
         }
-        fantasma.className = "estructura";
-        fantasma.style.zIndex = parseInt(fantasma.style.top); //las de mas abajo se dibujan adelante
-
-        //la guardamos en la lista de construidas y al hacerle click se abre su info
-        let construida = { tipo: fantasma.datos, imagen: fantasma, ultimoReclamo: Date.now() };
-        construidas.push(construida);
-        fantasma.onclick = function (evento) {
-            if (!fantasma && !seMovio) {
-                evento.stopPropagation();
-                abrirInfo(construida);
-            }
-        };
+        recursos.oro -= precioActual(tipo); //se cobra la estructura (antes de ponerla, si no la primera dejaria de ser gratis)
+        ponerEstructura(tipo, parseFloat(fantasma.style.left), parseFloat(fantasma.style.top), {}, fantasma);
+        fantasma = null;
 
         //avisamos a las misiones (misiones.js)
         sumarProgreso("estructuras");
-        if (fantasma.dataset.nombre === "Incubadora") {
+        if (tipo.nombre === "Incubadora") {
             sumarProgreso("incubadoras");
         }
-        fantasma = null;
+        mostrarRecursos();
+        guardarPartida();
     }
 };
 
@@ -191,77 +326,14 @@ document.onkeydown = function (evento) {
         fantasma.remove();
         fantasma = null;
     } else if (evento.key === "Escape") {
-        cerrarInfo();
+        cerrarConEscape(); //interfaz.js (primero la ventana, despues la seleccion)
     }
 };
 
-//=== PANEL DE INFORMACION DE LAS ESTRUCTURAS ===
-let panelInfo = document.getElementById("info-estructura");
-let abierta = null; //la estructura que se esta mirando
+//=== LO QUE APARECE AL TOCAR UNA ESTRUCTURA (botones y ventanas) ESTÁ EN interfaz.js ===
 
-//cuanto oro junto la granja desde la ultima vez que se reclamo
-function oroGuardado(construida) {
-    let segundos = (Date.now() - construida.ultimoReclamo) / 1000;
-    return Math.min(Math.floor(segundos * construida.tipo.oroPorSegundo), construida.tipo.maximoOro);
-}
-
-function abrirInfo(construida) {
-    abierta = construida;
-    let tipo = construida.tipo;
-    panelInfo.innerHTML = '<button class="cerrar" title="Cerrar">✕</button>'
-        + '<img src="' + tipo.imagen + '">'
-        + "<h2>" + tipo.nombre + "</h2>"
-        + "<p>" + tipo.info + "</p>";
-    panelInfo.querySelector(".cerrar").onclick = cerrarInfo;
-
-    //cosas especiales de cada estructura
-    if (tipo.nombre === "Granja") {
-        let datos = document.createElement("div");
-        datos.className = "datos-granja";
-        datos.innerHTML = "<span>🪙 " + tipo.oroPorSegundo + " oro por segundo</span>"
-            + "<span>Máximo: 🪙 " + tipo.maximoOro + "</span>"
-            + '<span>Guardado: 🪙 <b id="oro-guardado"></b></span>';
-        let boton = document.createElement("button");
-        boton.className = "reclamar";
-        boton.id = "boton-reclamar";
-        boton.onclick = function () {
-            reclamarOro(construida);
-        };
-        panelInfo.appendChild(datos);
-        panelInfo.appendChild(boton);
-    }
-
-    panelInfo.classList.add("abierto");
-    actualizarInfo();
-}
-
-function cerrarInfo() {
-    abierta = null;
-    panelInfo.classList.remove("abierto");
-}
-
-function reclamarOro(construida) {
-    let oro = oroGuardado(construida);
-    if (oro === 0) {
-        return;
-    }
-    recursos.oro += oro;
-    construida.ultimoReclamo = Date.now(); //empieza a juntar de nuevo desde cero
-    mostrarRecursos();
-    actualizarInfo();
-}
-
-//actualiza los numeros del panel (el oro de la granja va subiendo solo)
-function actualizarInfo() {
-    if (!abierta || abierta.tipo.nombre !== "Granja") {
-        return;
-    }
-    let oro = oroGuardado(abierta);
-    let lleno = oro >= abierta.tipo.maximoOro;
-    document.getElementById("oro-guardado").textContent = oro + (lleno ? " (¡lleno!)" : "");
-    let boton = document.getElementById("boton-reclamar");
-    boton.textContent = "Reclamar 🪙 " + oro;
-    boton.disabled = oro === 0;
-}
-
-setInterval(actualizarInfo, 250);
+//4 veces por segundo: los huevos van contando y la comida/oro va subiendo
+setInterval(function () {
+    actualizarIncubadoras(); //monstruos.js
+    actualizarInterfaz(); //interfaz.js
+}, 250);

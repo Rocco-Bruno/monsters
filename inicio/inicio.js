@@ -1,3 +1,11 @@
+// Al pulsar Play empieza una partida nueva (se borra la partida guardada, ver mapa/guardado.js).
+document.getElementById("boton-play").onclick = function () {
+    try {
+        sessionStorage.removeItem("monsters-city-partida");
+    } catch (error) {
+    }
+};
+
 // Al pulsar Configuración, muestra un aviso mientras esa opción está pendiente.
 document.getElementById("boton-configuracion").onclick = function () {
     alert("Próximamente");

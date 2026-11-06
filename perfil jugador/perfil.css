@@ -34,6 +34,21 @@ header {
     text-decoration: none;
 }
 
+.header-derecha {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/*boton para volver al mapa (arriba a la derecha)*/
+.header-derecha a {
+    white-space: nowrap; /*que el texto no se parta en varias lineas*/
+}
+
+.boton.volver {
+    padding: 10px 16px;
+}
+
 nav {
     display: flex;
     gap: 28px;

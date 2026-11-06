@@ -4,9 +4,10 @@ let progreso = { estructuras: 0, incubadoras: 0, huevos: 0, mejorasGranja: 0 };
 //misiones principales
 //tipo = que cosa del progreso cuenta, meta = cuanto hay que hacer
 //premio = "oro" o "gemas" (las dificiles dan gemas), cantidad = cuanto se gana
+//premio = "huevo" da un huevo al inventario, cantidad = el color del huevo (ver monstruos.js)
 let misiones = [
     { texto: "Construí tu primera estructura", tipo: "estructuras", meta: 1, premio: "oro", cantidad: 100 },
-    { texto: "Construí una incubadora", tipo: "incubadoras", meta: 1, premio: "oro", cantidad: 150 },
+    { texto: "Construí una incubadora", tipo: "incubadoras", meta: 1, premio: "huevo", cantidad: "rojo" },
     { texto: "Eclosioná 1 huevo", tipo: "huevos", meta: 1, premio: "oro", cantidad: 200 },
     { texto: "Eclosioná 3 huevos", tipo: "huevos", meta: 3, premio: "oro", cantidad: 500 },
     { texto: "Mejorá 1 vez la granja", tipo: "mejorasGranja", meta: 1, premio: "oro", cantidad: 300 },
@@ -21,6 +22,7 @@ let botonMisiones = document.getElementById("boton-misiones");
 //abrir y cerrar el panel de misiones
 botonMisiones.onclick = function () {
     listaMisiones.classList.toggle("abierto");
+    document.getElementById("inventario").classList.remove("abierto"); //no se abren los dos juntos
 };
 
 //llamar a esta funcion cada vez que el jugador hace algo
@@ -31,10 +33,22 @@ function sumarProgreso(tipo) {
 }
 
 function reclamar(mision) {
-    recursos[mision.premio] += mision.cantidad;
+    if (mision.premio === "huevo") {
+        inventario.huevos.push(mision.cantidad); //el huevo va al inventario (monstruos.js)
+    } else {
+        recursos[mision.premio] += mision.cantidad;
+    }
     mision.reclamada = true;
-    mostrarRecursos();
     mostrarMisiones();
+    refrescar(); //redibuja recursos, inventario y guarda
+}
+
+//lo que se muestra como premio en la lista
+function textoPremio(mision) {
+    if (mision.premio === "huevo") {
+        return "🥚 Huevo " + monstruos[mision.cantidad].nombre.toLowerCase();
+    }
+    return (mision.premio === "oro" ? "🪙 " : "💎 ") + mision.cantidad;
 }
 
 //dibuja la lista de misiones con su progreso
@@ -44,13 +58,11 @@ function mostrarMisiones() {
 
     for (let mision of misiones) {
         let hecho = Math.min(progreso[mision.tipo], mision.meta);
-        let icono = mision.premio === "oro" ? "🪙" : "💎";
-
         let fila = document.createElement("div");
         fila.className = "mision";
         fila.innerHTML = "<p>" + mision.texto + "</p>"
             + "<span>" + hecho + "/" + mision.meta + "</span> "
-            + "<span>" + icono + " " + mision.cantidad + "</span>";
+            + "<span>" + textoPremio(mision) + "</span>";
 
         if (mision.reclamada) {
             fila.classList.add("reclamada");
