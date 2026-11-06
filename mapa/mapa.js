@@ -8,9 +8,9 @@
 //=== PRODUCCIÓN Y MEJORAS: CAMBIÁ ACÁ (ver produccion.js) ===
 //produce = que recurso junta ("comida" la granja, "oro" el hábitat)
 //produccionBase / produccionPorNivel = cuanto da por segundo a nivel 1 / cuanto suma cada nivel (solo granja,
-//    el hábitat produce lo que generan sus dragones, ver "calidades" en monstruos.js)
+//    el hábitat produce lo que generan sus mounstruos, ver "calidades" en monstruos.js)
 //maximoBase / maximoPorNivel = cuanto puede guardar antes de llenarse a nivel 1 / cuanto suma cada nivel
-//capacidadBase / capacidadPorNivel = cuantos dragones entran a nivel 1 / cuantos lugares suma cada nivel (solo hábitat)
+//capacidadBase / capacidadPorNivel = cuantos mounstruos entran a nivel 1 / cuantos lugares suma cada nivel (solo hábitat)
 //mejoraBase = cuanto oro cuesta mejorar de nivel 1 a 2; mejoraMultiplicador = cada mejora cuesta esto por la anterior
 //nivelMaximo = hasta que nivel se puede mejorar
 let estructuras = [
@@ -23,7 +23,7 @@ let estructuras = [
     },
     {
         nombre: "Granja", imagen: "../estructuras/granja.png", ancho: 120,
-        info: "Produce comida para mejorar a tus dragones. Se va guardando hasta llegar al máximo, así que pasá seguido a reclamarla.",
+        info: "Produce comida para mejorar a tus mounstruos. Se va guardando hasta llegar al máximo, así que pasá seguido a reclamarla.",
         precio: 100, primeraGratis: true,
         produce: "comida",
         produccionBase: 1, produccionPorNivel: 1,
@@ -32,7 +32,7 @@ let estructuras = [
     },
     {
         nombre: "Hábitat", imagen: "../estructuras/habitat_terminado.png", ancho: 200,
-        info: "El hogar de tus dragones: ellos generan oro. Cada hábitat es de una calidad y solo pueden vivir ahí los dragones de esa misma calidad.",
+        info: "El hogar de tus mounstruos: ellos generan oro. Cada hábitat es de una calidad y solo pueden vivir ahí los mounstruos de esa misma calidad.",
         precio: 250, primeraGratis: true,
         produce: "oro",
         maximoBase: 200, maximoPorNivel: 200,
@@ -41,7 +41,7 @@ let estructuras = [
     },
     {
         nombre: "Reservados", imagen: "../estructuras/reservados.png", ancho: 120,
-        info: "Acá se cruzan dos dragones para conseguir uno nuevo.",
+        info: "Acá se cruzan dos mounstruos para conseguir uno nuevo.",
         //todavia no tiene mejoras (no tiene mejoraBase)
         precio: 150, //esta nunca es gratis
     },

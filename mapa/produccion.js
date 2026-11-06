@@ -1,6 +1,6 @@
 //=== PRODUCCIÓN Y MEJORAS ===
-//la granja junta comida, el hábitat junta oro (lo generan los dragones que viven ahí)
-//las estructuras se mejoran con oro y los dragones se mejoran con comida
+//la granja junta comida, el hábitat junta oro (lo generan los mounstruos que viven ahí)
+//las estructuras se mejoran con oro y los mounstruos se mejoran con comida
 //(se carga despues de mapa.js y monstruos.js; los numeros se cambian en "estructuras" (mapa.js) y "calidades" (monstruos.js))
 
 let iconos = { oro: "🪙", comida: "🍖", gemas: "💎" };
@@ -20,7 +20,7 @@ function maximoGuardado(construida, nivel) {
     return valorPorNivel(construida.tipo.maximoBase, construida.tipo.maximoPorNivel, nivel || construida.nivel);
 }
 
-//cuantos dragones entran en el habitat, o cuantos huevos se incuban a la vez en la incubadora
+//cuantos mounstruos entran en el habitat, o cuantos huevos se incuban a la vez en la incubadora
 function capacidad(construida, nivel) {
     return valorPorNivel(construida.tipo.capacidadBase, construida.tipo.capacidadPorNivel, nivel || construida.nivel);
 }
@@ -39,7 +39,7 @@ function produccionPorSegundo(construida) {
     if (tipo.nombre === "Hábitat") {
         let total = 0;
         for (let dragon of construida.monstruos) {
-            total += oroDelDragon(dragon); //mas dragones = mas oro
+            total += oroDelDragon(dragon); //mas mounstruos = mas oro
         }
         return total;
     }
@@ -54,7 +54,7 @@ function guardadoAhora(construida) {
 }
 
 //pasa lo juntado hasta ahora a "guardado"
-//HAY QUE LLAMARLA ANTES de cambiar la produccion (mejorar, sumar o sacar dragones),
+//HAY QUE LLAMARLA ANTES de cambiar la produccion (mejorar, sumar o sacar mounstruos),
 //asi lo que se junto antes se cuenta con la produccion vieja
 function acumular(construida) {
     construida.guardado = guardadoAhora(construida);
@@ -96,7 +96,7 @@ function mejorarEstructura(construida) {
     refrescar();
 }
 
-//=== DRAGONES: se mejoran con comida ===
+//=== mounstruos: se mejoran con comida ===
 //cuanta comida cuesta subir al dragon al siguiente nivel
 function costoMejoraDragon(dragon) {
     return calidades[monstruos[dragon.color].calidad].comidaMejora * dragon.nivel;

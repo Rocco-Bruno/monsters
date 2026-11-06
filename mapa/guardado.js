@@ -27,7 +27,7 @@ function guardarPartida() {
     }
 }
 
-//en partidas viejas los dragones eran solo el color ("rojo"), ahora son { color, nivel }
+//en partidas viejas los mounstruos eran solo el color ("rojo"), ahora son { color, nivel }
 function comoDragon(dragon) {
     return typeof dragon === "string" ? { color: dragon, nivel: 1 } : dragon;
 }

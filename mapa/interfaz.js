@@ -85,7 +85,7 @@ function tieneMejoras(construida) {
     return !!construida.tipo.mejoraBase;
 }
 
-//=== BARRA DE ABAJO (nombre, dragones/huevos y botones) ===
+//=== BARRA DE ABAJO (nombre, mounstruos/huevos y botones) ===
 function dibujarBarra() {
     vivosBarra = [];
     let construida = seleccionada;
@@ -99,7 +99,7 @@ function dibujarBarra() {
     barraSeleccion.appendChild(titulo);
 
     if (tipo.nombre === "Hábitat") {
-        barraSeleccion.appendChild(tiraDragones(construida));
+        barraSeleccion.appendChild(tiramounstruos(construida));
     } else if (tipo.nombre === "Incubadora") {
         barraSeleccion.appendChild(tiraHuevos(construida));
     }
@@ -130,7 +130,7 @@ function dibujarBarra() {
             ponerInsignia(oro, cantidad);
             oro.classList.toggle("apagado", cantidad === 0);
         });
-        botones.appendChild(botonAccion("🐲", "Dragones", function () { abrirVentana(ventanaDragones); }));
+        botones.appendChild(botonAccion("", "mounstruos", function () { abrirVentana(ventanamounstruos); }));
     }
 
     if (tipo.nombre === "Incubadora") {
@@ -170,8 +170,8 @@ function ponerInsignia(accionDiv, valor) {
     insignia.style.display = valor ? "block" : "none";
 }
 
-//los dragones del habitat uno al lado del otro, y los lugares libres
-function tiraDragones(habitat) {
+//los mounstruos del habitat uno al lado del otro, y los lugares libres
+function tiramounstruos(habitat) {
     let tira = document.createElement("div");
     tira.className = "tira";
     let total = capacidad(habitat);
@@ -186,12 +186,12 @@ function tiraDragones(habitat) {
         } else {
             hueco.classList.add("vacio");
             hueco.textContent = "+";
-            hueco.title = "Lugar libre: añadir un dragón";
+            hueco.title = "Lugar libre: añadir un mounstro";
         }
-        hueco.onclick = function () { abrirVentana(ventanaDragones); };
+        hueco.onclick = function () { abrirVentana(ventanamounstruos); };
         tira.appendChild(hueco);
     }
-    return envolverTira(tira, "Dragones " + habitat.monstruos.length + "/" + total);
+    return envolverTira(tira, "mounstruos " + habitat.monstruos.length + "/" + total);
 }
 
 //los huevos que se estan incubando y los lugares libres
@@ -288,7 +288,7 @@ function ventanaInfo(construida) {
         datos.push("Guarda hasta 🍖 " + maximoGuardado(construida));
     } else if (tipo.nombre === "Hábitat") {
         datos.push("Calidad: " + (construida.calidad ? calidades[construida.calidad].nombre : "ninguna todavía"));
-        datos.push("Dragones: " + construida.monstruos.length + "/" + capacidad(construida));
+        datos.push("mounstruos: " + construida.monstruos.length + "/" + capacidad(construida));
         datos.push("🪙 " + produccionPorSegundo(construida) + " oro por segundo");
         datos.push("Guarda hasta 🪙 " + maximoGuardado(construida));
     } else if (tipo.nombre === "Incubadora") {
@@ -323,7 +323,7 @@ function ventanaMejorar(construida) {
         cambios.push(["🍖 Comida por segundo", produccionPorSegundo(construida), valorPorNivel(tipo.produccionBase, tipo.produccionPorNivel, despues)]);
     }
     if (tipo.nombre === "Hábitat") {
-        cambios.push(["🐲 Dragones", capacidad(construida), capacidad(construida, despues)]);
+        cambios.push(["🐲 mounstruos", capacidad(construida), capacidad(construida, despues)]);
     }
     if (tipo.nombre === "Incubadora") {
         cambios.push(["🥚 Huevos a la vez", capacidad(construida), capacidad(construida, despues)]);
@@ -441,12 +441,12 @@ function ventanaHuevos(incubadora) {
     return { titulo: "Incubadora", contenido: contenido };
 }
 
-//--- DRAGONES (habitat): los que viven acá y los del inventario que se pueden poner ---
-function ventanaDragones(habitat) {
-    let contenido = crearDiv("ventana-dragones");
+//--- mounstruos (habitat): los que viven acá y los del inventario que se pueden poner ---
+function ventanamounstruos(habitat) {
+    let contenido = crearDiv("ventana-mounstruos");
     let total = capacidad(habitat);
     let calidad = habitat.calidad ? calidades[habitat.calidad].nombre : "ninguna todavía (la decide el primer dragón)";
-    contenido.innerHTML = '<p class="capacidad">Dragones <b>' + habitat.monstruos.length + "/" + total + "</b> · Calidad: " + calidad + "</p>";
+    contenido.innerHTML = '<p class="capacidad">mounstruos <b>' + habitat.monstruos.length + "/" + total + "</b> · Calidad: " + calidad + "</p>";
 
     habitat.monstruos.forEach(function (dragon, i) {
         contenido.appendChild(filaMonstruo(
@@ -466,7 +466,7 @@ function ventanaDragones(habitat) {
     });
     contenido.insertAdjacentHTML("beforeend", "<h3>Añadir desde el inventario</h3>");
     if (compatibles.length === 0) {
-        contenido.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés dragones '
+        contenido.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés mounstruos '
             + (habitat.calidad ? "de calidad " + calidades[habitat.calidad].nombre.toLowerCase() + " " : "")
             + "en el inventario.</p>");
     }
@@ -482,5 +482,5 @@ function ventanaDragones(habitat) {
             [crearBoton("Añadir", function () { ponerEnHabitat(habitat, i); }, lleno, ayuda)]
         ));
     });
-    return { titulo: "Dragones del hábitat", contenido: contenido };
+    return { titulo: "mounstruos del hábitat", contenido: contenido };
 }

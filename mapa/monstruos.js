@@ -2,14 +2,14 @@
 //(se carga despues de mapa.js)
 
 //=== CALIDADES: CAMBIÁ ACÁ ===
-//tiempoEclosion = segundos que tarda el huevo, ventaHuevo = oro que da al venderlo
+//tiempoEclosion = segundos que tarda el huevo, ventaHuevo = oro que da al venderlo, precioHuevo = oro que cuesta en la tienda
 //oroPorSegundo = oro que genera el dragon en un hábitat a nivel 1 (a nivel 2 genera el doble, a nivel 3 el triple...)
 //comidaMejora = comida para pasar de nivel 1 a 2 (de 2 a 3 cuesta el doble, de 3 a 4 el triple...)
 let calidades = {
-    comun: { nombre: "Común", tiempoEclosion: 10, ventaHuevo: 50, oroPorSegundo: 1, comidaMejora: 20 },
-    raro: { nombre: "Raro", tiempoEclosion: 30, ventaHuevo: 200, oroPorSegundo: 3, comidaMejora: 50 },
-    epico: { nombre: "Épico", tiempoEclosion: 60, ventaHuevo: 500, oroPorSegundo: 6, comidaMejora: 100 },
-    legendario: { nombre: "Legendario", tiempoEclosion: 120, ventaHuevo: 1000, oroPorSegundo: 12, comidaMejora: 200 },
+    comun: { nombre: "Común", tiempoEclosion: 10, ventaHuevo: 50, precioHuevo: 100, oroPorSegundo: 1, comidaMejora: 20 },
+    raro: { nombre: "Raro", tiempoEclosion: 30, ventaHuevo: 200, precioHuevo: 400, oroPorSegundo: 3, comidaMejora: 50 },
+    epico: { nombre: "Épico", tiempoEclosion: 60, ventaHuevo: 500, precioHuevo: 1000, oroPorSegundo: 6, comidaMejora: 100 },
+    legendario: { nombre: "Legendario", tiempoEclosion: 120, ventaHuevo: 1000, precioHuevo: 2000, oroPorSegundo: 12, comidaMejora: 200 },
 };
 
 //CAMBIÁ ACÁ hasta que nivel se puede mejorar un dragon
@@ -147,9 +147,9 @@ function mostrarInventario() {
         ));
     });
 
-    panelInventario.insertAdjacentHTML("beforeend", "<h3>🐲 Dragones</h3>");
+    panelInventario.insertAdjacentHTML("beforeend", "<h3> Mounstros</h3>");
     if (inventario.monstruos.length === 0) {
-        panelInventario.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés dragones sin hábitat.</p>');
+        panelInventario.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés mounstruos sin hábitat.</p>');
     }
     for (let dragon of inventario.monstruos) {
         panelInventario.appendChild(filaMonstruo(
@@ -242,7 +242,7 @@ function actualizarIncubadoras() {
 }
 
 //=== HÁBITAT ===
-//el oro que generan los dragones se calcula en produccion.js
+//el oro que generan los mounstruos se calcula en produccion.js
 function ponerEnHabitat(habitat, i) {
     let dragon = inventario.monstruos[i];
     let calidad = monstruos[dragon.color].calidad;
@@ -273,22 +273,22 @@ function sacarDelHabitat(habitat, i) {
 
 //=== LO QUE SE VE ARRIBA DE LAS ESTRUCTURAS EN EL MAPA ===
 
-//CAMBIÁ ACÁ como se acomodan los dragones en el hábitat (todo medido desde el centro de la imagen del hábitat)
-//para que NO se pisen, la separacion entre dragones (de costado y entre filas) siempre es mayor que su tamaño
+//CAMBIÁ ACÁ como se acomodan los mounstruos en el hábitat (todo medido desde el centro de la imagen del hábitat)
+//para que NO se pisen, la separacion entre mounstruos (de costado y entre filas) siempre es mayor que su tamaño
 //pocos (hasta 3): una fila, mas grandes
-let pocosDragones = { maximo: 3, y: 14, separacion: 44, escala: 1.2 }; //escala 1.2 = 38px, separacion 44 > 38
+let pocosmounstruos = { maximo: 3, y: 14, separacion: 44, escala: 1.2 }; //escala 1.2 = 38px, separacion 44 > 38
 //mas de 3: filas en el pasto de adelante; y = altura de la fila, lugares = cuantos entran
 let filasHabitat = [
     { y: 4, lugares: 4 },
     { y: 40, lugares: 2 },
 ];
-let muchosDragones = { separacion: 36, escala: 1 }; //escala 1 = 32px, separacion 36 > 32 (y las filas estan a 36)
+let muchosmounstruos = { separacion: 36, escala: 1 }; //escala 1 = 32px, separacion 36 > 32 (y las filas estan a 36)
 
 //devuelve donde va cada dragon: [{ x, y, escala }], sin que se pisen
-function lugaresDragones(cantidad) {
+function lugaresmounstruos(cantidad) {
     let lugares = [];
-    if (cantidad <= pocosDragones.maximo) {
-        agregarFila(lugares, cantidad, pocosDragones.y, pocosDragones.separacion, pocosDragones.escala);
+    if (cantidad <= pocosmounstruos.maximo) {
+        agregarFila(lugares, cantidad, pocosmounstruos.y, pocosmounstruos.separacion, pocosmounstruos.escala);
         return lugares;
     }
     let total = filasHabitat.reduce(function (suma, fila) { return suma + fila.lugares; }, 0);
@@ -296,7 +296,7 @@ function lugaresDragones(cantidad) {
         let quedan = cantidad;
         for (let fila of filasHabitat) {
             let enEsta = Math.min(quedan, fila.lugares);
-            agregarFila(lugares, enEsta, fila.y, muchosDragones.separacion, muchosDragones.escala);
+            agregarFila(lugares, enEsta, fila.y, muchosmounstruos.separacion, muchosmounstruos.escala);
             quedan -= enEsta;
         }
         return lugares;
@@ -350,7 +350,7 @@ function dibujarMarcador(construida) {
 
     //habitat: cada dragon en su lugar, sin pisarse
     if (construida.tipo.nombre === "Hábitat") {
-        let lugares = lugaresDragones(construida.monstruos.length);
+        let lugares = lugaresmounstruos(construida.monstruos.length);
         construida.monstruos.forEach(function (dragon, i) {
             let lugar = lugares[i];
             let dibujo = spriteBebe(dragon.color, lugar.escala);
