@@ -414,13 +414,19 @@ function ventanaHuevos(incubadora) {
             contenido.appendChild(filaMonstruo(spriteHuevo(huevo.color, 1.5), nombre, "¡Eclosionó!",
                 [crearBoton("Reclamar dragón 🐲", function () { reclamarBebe(incubadora, j); })]));
         } else {
+            let acelerar = crearBoton("", function () { acelerarHuevo(huevo); }); //monstruos.js
             let fila = filaMonstruo(spriteHuevo(huevo.color, 1.5), nombre,
-                '<span class="cuenta"></span><span class="barra-tiempo"><span class="relleno"></span></span>', []);
+                '<span class="cuenta"></span><span class="barra-tiempo"><span class="relleno"></span></span>', [acelerar]);
             contenido.appendChild(fila);
             vivo(vivosVentana, function () {
                 let falta = faltaHuevo(huevo);
                 fila.querySelector(".cuenta").textContent = "Eclosiona en " + falta.segundos + "s";
                 fila.querySelector(".relleno").style.width = (falta.avance * 100) + "%";
+                //el costo baja a medida que pasa el tiempo
+                let costo = costoAcelerar(huevo);
+                acelerar.textContent = "Acelerar 💎 " + costo;
+                acelerar.disabled = recursos.gemas < costo;
+                acelerar.title = recursos.gemas < costo ? "Faltan gemas" : "Termina de incubar ya";
             });
         }
     }

@@ -6,7 +6,10 @@ function ventanaTienda() {
     let contenido = crearDiv("ventana-tienda");
     contenido.innerHTML = '<p class="capacidad">Tenés 🪙 <b>' + recursos.oro + "</b></p>";
 
-    for (let calidad in calidades) {
+    //CAMBIÁ ACÁ que calidades se venden (por ahora solo los comunes; los demas se consiguen de otra forma)
+    let calidadesEnVenta = ["comun"];
+
+    for (let calidad of calidadesEnVenta) {
         let precio = calidades[calidad].precioHuevo;
         contenido.insertAdjacentHTML("beforeend", "<h3>" + calidades[calidad].nombre + " · 🪙 " + precio + "</h3>");
         for (let color in monstruos) {

@@ -219,6 +219,25 @@ function faltaHuevo(huevo) {
     return { segundos: Math.ceil(falta / 1000), avance: 1 - falta / total };
 }
 
+//=== ACELERAR CON GEMAS ===
+//CAMBIÁ ACÁ cuantos segundos se saltean por cada gema (10 = 1 gema cada 10 segundos que falten)
+let segundosPorGema = 10;
+
+//gemas que cuesta terminar ya el huevo (minimo 1)
+function costoAcelerar(huevo) {
+    return Math.max(1, Math.ceil(faltaHuevo(huevo).segundos / segundosPorGema));
+}
+
+function acelerarHuevo(huevo) {
+    let costo = costoAcelerar(huevo);
+    if (huevoListo(huevo) || recursos.gemas < costo) {
+        return;
+    }
+    recursos.gemas -= costo;
+    huevo.fin = Date.now(); //eclosiona ya
+    refrescar();
+}
+
 //j = cual de los huevos de la incubadora
 function reclamarBebe(incubadora, j) {
     let huevo = incubadora.huevos[j];
