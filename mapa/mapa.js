@@ -13,10 +13,22 @@
 //capacidadBase / capacidadPorNivel = cuantos mounstruos entran a nivel 1 / cuantos lugares suma cada nivel (solo hábitat)
 //mejoraBase = cuanto oro cuesta mejorar de nivel 1 a 2; mejoraMultiplicador = cada mejora cuesta esto por la anterior
 //nivelMaximo = hasta que nivel se puede mejorar
+//nivelPrimero / nivelCadaOtro = nivel de jugador que hace falta para construir la primera / cuantos niveles mas para cada una de las siguientes
+//    (ej: 1 y 3 = la primera a nivel 1, la segunda a nivel 4, la tercera a nivel 7...). Si no tiene, no pide nivel
+
+//las estructuras que ya se construyeron en el mapa
+let construidas = [];
+
+//recursos del jugador
+let recursos = { oro: 0, comida: 0, gemas: 0 };
+
+//nivel y experiencia del jugador (como se gana y que da subir de nivel: experiencia.js)
+let jugador = { nivel: 1, xp: 0 };
+
 let estructuras = [
     {
         nombre: "Incubadora", imagen: "../estructuras/incubadora.png", ancho: 150,
-        info: "Acá se ponen los huevos para que eclosionen. Cuando el tiempo termina, reclamá al dragón y va a tu inventario. Mejorándola podés incubar más huevos al mismo tiempo.",
+        info: "Acá se ponen los huevos para que eclosionen. Cuando el tiempo termina, reclamá al monstruo y va a tu inventario. Mejorándola podés incubar más huevos al mismo tiempo.",
         precio: 0, primeraGratis: true, maximo: 1, //es gratis y solo se puede tener una
         capacidadBase: 1, capacidadPorNivel: 1, //huevos a la vez: 1 a nivel 1, 2 a nivel 2...
         mejoraBase: 200, mejoraMultiplicador: 2, nivelMaximo: 5,
@@ -37,6 +49,7 @@ let estructuras = [
         produce: "oro",
         maximoBase: 200, maximoPorNivel: 200,
         capacidadBase: 2, capacidadPorNivel: 1,
+        nivelPrimero: 1, nivelCadaOtro: 3,
         mejoraBase: 150, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
@@ -65,10 +78,22 @@ function motivoNoSePuede(estructura) {
     if (estructura.maximo && cantidadConstruidas(estructura) >= estructura.maximo) {
         return "Ya construida";
     }
+    let nivelNecesario = nivelParaConstruir(estructura);
+    if (jugador.nivel < nivelNecesario) {
+        return "Nivel " + nivelNecesario;
+    }
     if (recursos.oro < precioActual(estructura)) {
         return "Falta oro";
     }
     return null;
+}
+
+//nivel de jugador que hace falta para construir la proxima de este tipo (1 = no pide nada)
+function nivelParaConstruir(estructura) {
+    if (!estructura.nivelPrimero) {
+        return 1;
+    }
+    return estructura.nivelPrimero + estructura.nivelCadaOtro * cantidadConstruidas(estructura);
 }
 
 function textoPrecio(estructura) {
@@ -76,11 +101,7 @@ function textoPrecio(estructura) {
     return precio === 0 ? "Gratis" : "🪙 " + precio;
 }
 
-//las estructuras que ya se construyeron en el mapa
-let construidas = [];
 
-//recursos del jugador
-let recursos = { oro: 0, comida: 0, gemas: 0 };
 
 function mostrarRecursos() {
     document.getElementById("oro").textContent = recursos.oro;
@@ -110,7 +131,8 @@ function actualizarMenu() {
     for (let estructura of estructuras) {
         let motivo = motivoNoSePuede(estructura);
         let precio = estructura.boton.querySelector(".precio");
-        precio.textContent = motivo === "Ya construida" ? "Ya construida" : textoPrecio(estructura);
+        let pideNivel = motivo && motivo.indexOf("Nivel") === 0;
+        precio.textContent = motivo === "Ya construida" ? "Ya construida" : pideNivel ? "🔒 Desde " + motivo.toLowerCase() : textoPrecio(estructura);
         precio.classList.toggle("gratis", precioActual(estructura) === 0 && !motivo);
         estructura.boton.disabled = motivo !== null;
         estructura.boton.title = motivo || "";
@@ -312,6 +334,7 @@ mapa.onclick = function (evento) {
 
         //avisamos a las misiones (misiones.js)
         sumarProgreso("estructuras");
+        ganarXP(xpPor.construir); //experiencia.js
         if (tipo.nombre === "Incubadora") {
             sumarProgreso("incubadoras");
         }
@@ -335,5 +358,6 @@ document.onkeydown = function (evento) {
 //4 veces por segundo: los huevos van contando y la comida/oro va subiendo
 setInterval(function () {
     actualizarIncubadoras(); //monstruos.js
+    actualizarBurbujas(); //produccion.js
     actualizarInterfaz(); //interfaz.js
 }, 250);

@@ -45,17 +45,16 @@
 
                 <div class="datos-jugador">
 
-                    <div class="avatar">
-                        <img src="assets/avatar.png" alt="Avatar del jugador">
-                    </div>
+                    <!--avatar: el monstruo que elijas en tu colección (perfil.js); el borde es el marco puesto-->
+                    <div class="avatar" id="avatar"></div>
 
                     <div class="informacion">
                         <p class="etiqueta">ENTRENADOR</p>
-                        <h2>MonsterPlayer</h2>
+                        <h2 id="nombre-jugador">MonsterPlayer</h2>
                         <p class="descripcion">
                             Explorador del mundo de los monstruos.
                         </p>
-                        <span class="nivel">NIVEL 01</span>
+                        <span class="nivel" id="nivel-perfil">NIVEL 01</span>
                     </div>
 
                 </div>
@@ -63,27 +62,27 @@
                 <div class="experiencia">
                     <div class="texto-experiencia">
                         <span>EXPERIENCIA</span>
-                        <span>0 / 100 XP</span>
+                        <span id="texto-xp-perfil">0 / 100 XP</span>
                     </div>
 
                     <div class="barra">
-                        <div class="progreso"></div>
+                        <div class="progreso" id="barra-xp-perfil"></div>
                     </div>
                 </div>
 
                 <div class="detalles">
                     <div class="detalle">
-                        <span class="numero">00</span>
+                        <span class="numero" id="total-monstruos">00</span>
                         <span class="nombre">MONSTRUOS</span>
                     </div>
 
                     <div class="detalle">
-                        <span class="numero">00</span>
+                        <span class="numero" id="total-huevos">00</span>
                         <span class="nombre">HUEVOS</span>
                     </div>
 
                     <div class="detalle">
-                        <span class="numero">00</span>
+                        <span class="numero" id="total-logros">00</span>
                         <span class="nombre">LOGROS</span>
                     </div>
                 </div>
@@ -98,37 +97,26 @@
 
                     <div class="dato">
                         <span>Usuario</span>
-                        <span>MonsterPlayer</span>
+                        <span id="dato-usuario">MonsterPlayer</span>
                     </div>
 
                     <div class="dato">
                         <span>Rango</span>
-                        <span>Principiante</span>
+                        <span id="rango-perfil">Principiante</span>
                     </div>
 
                     <div class="dato">
-                        <span>Estado</span>
-                        <span class="disponible">Activo</span>
-                    </div>
-
-                    <div class="dato">
-                        <span>Equipo</span>
-                        <span>Sin equipo</span>
+                        <span>Gemas</span>
+                        <span id="gemas-perfil">💎 0</span>
                     </div>
                 </div>
 
+                <!--marcos para el avatar, se compran con gemas (perfil.js)-->
                 <div class="caja">
-                    <p class="subtitulo">/// PRÓXIMO OBJETIVO</p>
-                    <h3>PRIMER DESCUBRIMIENTO</h3>
-
-                    <p class="objetivo">
-                        Descubrí tu primer monstruo para comenzar
-                        a completar tu colección.
-                    </p>
-
-                    <a href="index.html#monstruos" class="boton">
-                        EXPLORAR
-                    </a>
+                    <p class="subtitulo">/// PERSONALIZÁ TU PERFIL</p>
+                    <h3>MARCOS</h3>
+                    <p class="objetivo">Comprá marcos con gemas y elegí cuál usar. Para cambiar tu avatar, tocá "Usar de avatar" en un monstruo de tu colección.</p>
+                    <div id="lista-marcos"></div>
                 </div>
 
             </aside>
@@ -143,48 +131,11 @@
                     <h2>MI COLECCIÓN</h2>
                 </div>
 
-                <span class="contador">0 / 14</span>
+                <span class="contador" id="contador-coleccion">0 / 14</span>
             </div>
 
-            <div class="contenedor-monstruos">
-
-                <article class="monstruo">
-                    <div class="imagen verde">
-                        <img src="assets/monstruo-verde.png"
-                             alt="Monstruo verde">
-                    </div>
-                    <h3>???</h3>
-                    <p>Sin descubrir</p>
-                </article>
-
-                <article class="monstruo">
-                    <div class="imagen dorado">
-                        <img src="assets/monstruo-dorado.png"
-                             alt="Monstruo dorado">
-                    </div>
-                    <h3>???</h3>
-                    <p>Sin descubrir</p>
-                </article>
-
-                <article class="monstruo">
-                    <div class="imagen hielo">
-                        <img src="assets/monstruo-hielo.png"
-                             alt="Monstruo de hielo">
-                    </div>
-                    <h3>???</h3>
-                    <p>Sin descubrir</p>
-                </article>
-
-                <article class="monstruo">
-                    <div class="imagen blanco">
-                        <img src="assets/monstruo-blanco.png"
-                             alt="Monstruo blanco">
-                    </div>
-                    <h3>???</h3>
-                    <p>Sin descubrir</p>
-                </article>
-
-            </div>
+            <!--perfil.js pone aca todos los mounstruos del juego (los que no conseguiste salen como ???)-->
+            <div class="contenedor-monstruos" id="contenedor-monstruos"></div>
 
         </section>
 
@@ -196,6 +147,10 @@
         <br>
         <p>© 2026 Nebula games, todos los derechos reservados.</p>
     </footer>
+
+    <script src="../mapa/datos-monstruos.js"></script>
+    <script src="../mapa/experiencia.js"></script>
+    <script src="perfil.js"></script>
 
 </body>
 </html>

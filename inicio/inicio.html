@@ -17,6 +17,20 @@
         </div>
     </main>
 
+    <!--ventana para poner el nombre del jugador al tocar Play (inicio.js)-->
+    <div id="ventana-nombre">
+        <form class="caja-nombre" id="form-nombre">
+            <h2>¿Cómo te llamás?</h2>
+            <p>Este nombre se va a ver en tu perfil.</p>
+            <input type="text" id="input-nombre" maxlength="16" placeholder="Tu nombre" autocomplete="off">
+            <p class="error" id="error-nombre"></p>
+            <div class="botones-nombre">
+                <button type="button" class="boton" id="boton-cancelar">Cancelar</button>
+                <button type="submit" class="boton" id="boton-empezar">Jugar</button>
+            </div>
+        </form>
+    </div>
+
     <script src="inicio.js"></script>
 
 </body>

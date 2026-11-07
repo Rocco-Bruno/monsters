@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000000;
+    overflow: hidden;
+}
+
+.pantalla-intro {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    cursor: pointer;
+    transition: opacity 0.6s ease;
+}
+
+/*cuando termina la animacion se apaga la pantalla antes de cambiar de pagina*/
+.pantalla-intro.saliendo {
+    opacity: 0;
+}
+
+.logo-intro {
+    width: min(90vw, 900px);
+    height: auto;
+}
+
+.saltar {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    color: #5a5878;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+}

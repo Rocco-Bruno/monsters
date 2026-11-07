@@ -1,84 +1,25 @@
 //=== MONSTRUOS, HUEVOS, INVENTARIO, INCUBADORA Y HÁBITAT ===
-//(se carga despues de mapa.js)
-
-//=== CALIDADES: CAMBIÁ ACÁ ===
-//tiempoEclosion = segundos que tarda el huevo, ventaHuevo = oro que da al venderlo, precioHuevo = oro que cuesta en la tienda
-//oroPorSegundo = oro que genera el dragon en un hábitat a nivel 1 (a nivel 2 genera el doble, a nivel 3 el triple...)
-//comidaMejora = comida para pasar de nivel 1 a 2 (de 2 a 3 cuesta el doble, de 3 a 4 el triple...)
-let calidades = {
-    comun: { nombre: "Común", tiempoEclosion: 10, ventaHuevo: 50, precioHuevo: 100, oroPorSegundo: 1, comidaMejora: 20 },
-    raro: { nombre: "Raro", tiempoEclosion: 30, ventaHuevo: 200, precioHuevo: 400, oroPorSegundo: 3, comidaMejora: 50 },
-    epico: { nombre: "Épico", tiempoEclosion: 60, ventaHuevo: 500, precioHuevo: 1000, oroPorSegundo: 6, comidaMejora: 100 },
-    legendario: { nombre: "Legendario", tiempoEclosion: 120, ventaHuevo: 1000, precioHuevo: 2000, oroPorSegundo: 12, comidaMejora: 200 },
-};
-
-//CAMBIÁ ACÁ hasta que nivel se puede mejorar un dragon
-let nivelMaximoDragon = 10;
-
-//las animaciones son tiras horizontales de cuadros de 32x32 (frames = cuantos cuadros tiene)
-//bebe: null = todavia no esta dibujado (se muestra el huevo en su lugar)
-//faltan dibujar: lila y gris (épicos)
-let carpeta = "../assets/png/mounstruos/";
-let monstruos = {
-    //comunes
-    rojo: { nombre: "Rojo", calidad: "comun", huevo: { src: "red/red-huevo.png", frames: 9 }, bebe: { src: "red/red-bebe-quieto.png", frames: 8 } },
-    azul: { nombre: "Azul", calidad: "comun", huevo: { src: "blue/huevo-blue.png", frames: 9 }, bebe: { src: "blue/blue.png", frames: 5 } },
-    amarillo: { nombre: "Amarillo", calidad: "comun", huevo: { src: "yellow/amarillo-huevo.png", frames: 9 }, bebe: { src: "yellow/yellow-bebe.png", frames: 8 } },
-    verde: { nombre: "Verde", calidad: "comun", huevo: { src: "green/huevo-green.png", frames: 9 }, bebe: null },
-    naranja: { nombre: "Naranja", calidad: "comun", huevo: { src: "orange/huevo-orange.png", frames: 9 }, bebe: null },
-    //raros
-    negro: { nombre: "Negro", calidad: "raro", huevo: { src: "black/huevo-black.png", frames: 9 }, bebe: { src: "black/black.png", frames: 5 } },
-    blanco: { nombre: "Blanco", calidad: "raro", huevo: { src: "white/white-huevo.png", frames: 9 }, bebe: { src: "white/blanco-bebe.png", frames: 8 } },
-    violeta: { nombre: "Violeta", calidad: "raro", huevo: { src: "violet/violet-huevo.png", frames: 9 }, bebe: { src: "violet/Violet-bebe-quieto.png", frames: 8 } },
-    marron: { nombre: "Marrón", calidad: "raro", huevo: { src: "brown/brown-huevo.png", frames: 9 }, bebe: { src: "brown/brown-bebe-quieto.png", frames: 8 } },
-    //epicos
-    rosa: { nombre: "Rosa", calidad: "epico", huevo: { src: "pink/huevo-pink.png", frames: 9 }, bebe: { src: "pink/pinnk.png", frames: 6 } },
-    celeste: { nombre: "Celeste", calidad: "epico", huevo: { src: "cian/huevo-cian.png", frames: 9 }, bebe: { src: "cian/cian-bebe-quieto.png", frames: 7 } },
-    //legendarios
-    rainbow: { nombre: "Rainbow", calidad: "legendario", huevo: { src: "raimbow/huevo-raimbow.png", frames: 9 }, bebe: { src: "raimbow/rimbow-bebe.png", frames: 7, ancho: 29 } },
-    plateado: { nombre: "Plateado", calidad: "legendario", huevo: { src: "plateado/huevo-plateado.png", frames: 9 }, bebe: { src: "plateado/plateado-bebe-quieto.png", frames: 7 } },
-    dorado: { nombre: "Dorado", calidad: "legendario", huevo: { src: "gold/huevo-gold.png", frames: 9 }, bebe: { src: "gold/gold.png", frames: 5 } },
-};
-
-//CAMBIÁ ACÁ la velocidad de las animaciones (milisegundos que dura cada cuadro)
-let velocidadSprites = 120;
+//(se carga despues de mapa.js y datos-monstruos.js)
 
 //lo que tiene guardado el jugador
 //huevos: el color de cada huevo (ej: "rojo")
-//monstruos: cada dragon es { color: "rojo", nivel: 1 } (igual en los hábitats)
+//monstruos: cada monstruo es { color: "rojo", nivel: 1 } (igual en los hábitats)
 let inventario = { huevos: [], monstruos: [] };
 
-//nombre que se muestra, ej: "Dragón rojo · Nv 2"
-function nombreDragon(dragon) {
-    return "Dragón " + monstruos[dragon.color].nombre.toLowerCase() + " · Nv " + dragon.nivel;
+//todos los mounstruos que consiguio el jugador en la partida (se ven en el perfil)
+//ej: { rojo: 2, dorado: 1 } = consiguio 2 rojos y 1 dorado
+let coleccion = {};
+
+//llamar cada vez que nace un monstruo; devuelve true si es la primera vez que lo consigue
+function registrarMonstruo(color) {
+    let esNuevo = !coleccion[color];
+    coleccion[color] = (coleccion[color] || 0) + 1;
+    return esNuevo;
 }
 
-//arma un cuadrito animado con la tira de imagenes
-function sprite(animacion, escala) {
-    let ancho = (animacion.ancho || 32) * escala;
-    let alto = (animacion.alto || 32) * escala;
-    let div = document.createElement("div");
-    div.className = "sprite";
-    div.style.width = ancho + "px";
-    div.style.height = alto + "px";
-    div.style.backgroundImage = 'url("' + carpeta + animacion.src + '")';
-    div.style.backgroundSize = (animacion.frames * ancho) + "px " + alto + "px";
-    div.style.setProperty("--fin", (-animacion.frames * ancho) + "px");
-    div.style.animationDuration = (animacion.frames * velocidadSprites) + "ms";
-    div.style.animationTimingFunction = "steps(" + animacion.frames + ")";
-    return div;
-}
-
-function spriteHuevo(color, escala) {
-    return sprite(monstruos[color].huevo, escala);
-}
-
-function spriteBebe(color, escala) {
-    return sprite(monstruos[color].bebe || monstruos[color].huevo, escala);
-}
-
-function nombreCalidad(color) {
-    return calidades[monstruos[color].calidad].nombre;
+//nombre que se muestra, ej: "Monstruo rojo · Nv 2"
+function nombreMonstruo(monstruo) {
+    return "Monstruo " + monstruos[monstruo.color].nombre.toLowerCase() + " · Nv " + monstruo.nivel;
 }
 
 //una fila con dibujo, nombre y botones (se usa en el inventario y en los paneles)
@@ -151,12 +92,12 @@ function mostrarInventario() {
     if (inventario.monstruos.length === 0) {
         panelInventario.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés mounstruos sin hábitat.</p>');
     }
-    for (let dragon of inventario.monstruos) {
+    for (let monstruo of inventario.monstruos) {
         panelInventario.appendChild(filaMonstruo(
-            spriteBebe(dragon.color, 1.5),
-            nombreDragon(dragon),
-            nombreCalidad(dragon.color) + " · tocá un hábitat para ponerlo",
-            [botonMejorarDragon(dragon, null)] //produccion.js
+            spriteBebe(monstruo.color, 1.5),
+            nombreMonstruo(monstruo),
+            nombreCalidad(monstruo.color) + " · tocá un hábitat para ponerlo",
+            [botonMejorarMonstruo(monstruo, null)] //produccion.js
         ));
     }
 
@@ -245,13 +186,24 @@ function reclamarBebe(incubadora, j) {
         return;
     }
     inventario.monstruos.push({ color: huevo.color, nivel: 1 });
+    let esNuevo = registrarMonstruo(huevo.color);
     incubadora.huevos.splice(j, 1);
     dibujarMarcador(incubadora);
     sumarProgreso("huevos"); //misiones.js
+
+    //primero la felicitacion del monstruo, despues (si hay) la de subir de nivel o completar la coleccion
+    let xp = xpPor.eclosionar[monstruos[huevo.color].calidad];
+    let xpTotal = xp + (esNuevo ? xpPor.descubrir : 0); //nacer + (si es nuevo) descubrirlo
+    let nota = (esNuevo ? textoDescubrimiento(huevo.color) + " · " : "") + "+" + xpTotal + " XP"; //experiencia.js
+    felicitar("monstruo", huevo.color, "Nació en la incubadora", [], nota); //felicitaciones.js
+    if (esNuevo) {
+        premiarDescubrimiento(huevo.color);
+    }
+    ganarXP(xp);
     refrescar();
 }
 
-//se llama 4 veces por segundo (mapa.js): el ! aparece arriba de la incubadora cuando hay un dragon para reclamar
+//se llama 4 veces por segundo (mapa.js): el ! aparece arriba de la incubadora cuando hay un monstruo para reclamar
 function actualizarIncubadoras() {
     for (let incubadora of construidas) {
         if (incubadora.tipo.nombre === "Incubadora" && incubadora.marcador) {
@@ -263,24 +215,24 @@ function actualizarIncubadoras() {
 //=== HÁBITAT ===
 //el oro que generan los mounstruos se calcula en produccion.js
 function ponerEnHabitat(habitat, i) {
-    let dragon = inventario.monstruos[i];
-    let calidad = monstruos[dragon.color].calidad;
+    let monstruo = inventario.monstruos[i];
+    let calidad = monstruos[monstruo.color].calidad;
     if (habitat.monstruos.length >= capacidad(habitat)) {
         return;
     }
     if (habitat.calidad && habitat.calidad !== calidad) {
         return;
     }
-    acumular(habitat); //lo juntado hasta ahora se cuenta sin el dragon nuevo
+    acumular(habitat); //lo juntado hasta ahora se cuenta sin el monstruo nuevo
     habitat.calidad = calidad; //el primero que entra decide la calidad del habitat
-    habitat.monstruos.push(dragon);
+    habitat.monstruos.push(monstruo);
     inventario.monstruos.splice(i, 1);
     dibujarMarcador(habitat);
     refrescar();
 }
 
 function sacarDelHabitat(habitat, i) {
-    acumular(habitat); //lo juntado hasta ahora se cuenta con el dragon todavia adentro
+    acumular(habitat); //lo juntado hasta ahora se cuenta con el monstruo todavia adentro
     inventario.monstruos.push(habitat.monstruos[i]);
     habitat.monstruos.splice(i, 1);
     if (habitat.monstruos.length === 0) {
@@ -303,7 +255,7 @@ let filasHabitat = [
 ];
 let muchosmounstruos = { separacion: 36, escala: 1 }; //escala 1 = 32px, separacion 36 > 32 (y las filas estan a 36)
 
-//devuelve donde va cada dragon: [{ x, y, escala }], sin que se pisen
+//devuelve donde va cada monstruo: [{ x, y, escala }], sin que se pisen
 function lugaresmounstruos(cantidad) {
     let lugares = [];
     if (cantidad <= pocosmounstruos.maximo) {
@@ -340,7 +292,7 @@ function agregarFila(lugares, cantidad, y, separacion, escala) {
 }
 
 function dibujarMarcador(construida) {
-    if (construida.tipo.nombre !== "Incubadora" && construida.tipo.nombre !== "Hábitat") {
+    if (construida.tipo.nombre !== "Incubadora" && !construida.tipo.produce) {
         return;
     }
     if (!construida.marcador) {
@@ -367,17 +319,22 @@ function dibujarMarcador(construida) {
         marcador.insertAdjacentHTML("beforeend", '<div class="aviso">!</div>');
     }
 
-    //habitat: cada dragon en su lugar, sin pisarse
+    //habitat: cada monstruo en su lugar, sin pisarse
     if (construida.tipo.nombre === "Hábitat") {
         let lugares = lugaresmounstruos(construida.monstruos.length);
-        construida.monstruos.forEach(function (dragon, i) {
+        construida.monstruos.forEach(function (monstruo, i) {
             let lugar = lugares[i];
-            let dibujo = spriteBebe(dragon.color, lugar.escala);
+            let dibujo = spriteBebe(monstruo.color, lugar.escala);
             dibujo.style.left = lugar.x + "px";
             dibujo.style.top = lugar.y + "px";
             dibujo.style.zIndex = Math.round(lugar.y + 100); //los de adelante tapan a los de atras
             marcador.appendChild(dibujo);
         });
+    }
+
+    //granja y habitat: el cuadrito con 🍖/🪙 para reclamar sin abrir nada (produccion.js)
+    if (construida.tipo.produce) {
+        marcador.appendChild(crearBurbuja(construida));
     }
 }
 

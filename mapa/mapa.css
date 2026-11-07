@@ -748,3 +748,334 @@ body {
     from { opacity: 1; margin-top: 0; }
     to { opacity: 0; margin-top: -60px; }
 }
+
+/*---cajas de la tienda (tienda.js)---*/
+
+.tarjeta-caja {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #201f39;
+    border: 2px solid #39365e;
+    text-align: left;
+}
+
+/*recuadro amarillo: despues va la imagen o animacion de la caja*/
+.imagen-caja {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    background: #f9d849;
+    border: 3px solid #b18c24;
+    border-bottom-width: 6px;
+}
+
+.texto-caja {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.probabilidades {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-size: 11px;
+}
+
+.texto-caja button {
+    align-self: flex-start;
+    padding: 6px 10px;
+    background: #f9d849;
+    color: #201f39;
+    border: 2px solid #b18c24;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.texto-caja button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/*colores de cada calidad*/
+.calidad-comun { color: #c5c2dd; }
+.calidad-raro { color: #6bb8ff; }
+.calidad-epico { color: #d78bff; }
+.calidad-legendario { color: #f9d849; }
+
+/*---cuadrito con 🍖/🪙 arriba de la granja y el hábitat para reclamar (produccion.js)---*/
+
+.marcador .burbuja {
+    display: none;
+    position: absolute;
+    left: -22px;
+    width: 44px;
+    height: 44px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 24px;
+    background: #ffffff;
+    border: 3px solid #f9d849;
+    border-bottom-width: 6px;
+    cursor: pointer;
+    pointer-events: auto; /*el marcador deja pasar los clicks, pero este cuadrito si se puede tocar*/
+    animation: saltar 0.6s infinite alternate;
+}
+
+.marcador .burbuja.visible {
+    display: block;
+}
+
+.marcador .burbuja:hover {
+    background: #fff6c9;
+}
+
+/*cuando ya llego al maximo (deja de juntar) el borde se pone rojo para que se note*/
+.marcador .burbuja.lleno {
+    border-color: #ff5a4f;
+}
+
+/*---pantalla de felicitaciones al conseguir un huevo o un monstruo (felicitaciones.js)---*/
+
+#felicitaciones {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40000; /*arriba de las ventanas*/
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(10, 9, 25, 0.8);
+    --color-calidad: #c5c2dd;
+}
+
+#felicitaciones.abierto {
+    display: flex;
+}
+
+/*cada calidad tiene su color (rayos, borde y texto)*/
+#felicitaciones.color-raro { --color-calidad: #6bb8ff; }
+#felicitaciones.color-epico { --color-calidad: #d78bff; }
+#felicitaciones.color-gemas { --color-calidad: #5fe3ff; }
+#felicitaciones.color-nivel { --color-calidad: #7dff6b; }
+#felicitaciones.color-legendario { --color-calidad: #f9d849; }
+
+.caja-felicitaciones {
+    width: 380px;
+    max-width: 100%;
+    padding: 20px;
+    background: #24223f;
+    color: #ffffff;
+    border: 3px solid var(--color-calidad);
+    border-bottom-width: 7px;
+    text-align: center;
+    overflow: hidden;
+    animation: entrar-felicitaciones 0.35s ease-out;
+}
+
+.titulo-felicitaciones {
+    color: #f9d849;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 3px 3px 0 #5145a5;
+}
+
+.subtitulo-felicitaciones {
+    margin-top: 4px;
+    color: #c5c2dd;
+    font-size: 14px;
+}
+
+/*el dibujo grande con rayos girando atras*/
+.escenario-felicitaciones {
+    position: relative;
+    height: 200px;
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.escenario-felicitaciones .rayos {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(var(--color-calidad) 0deg 12deg, transparent 12deg 30deg);
+    -webkit-mask-image: radial-gradient(circle, #000 15%, transparent 68%);
+    mask-image: radial-gradient(circle, #000 15%, transparent 68%);
+    opacity: 0.45;
+    animation: girar-rayos 8s linear infinite;
+}
+
+.dibujo-felicitaciones {
+    position: relative;
+    animation: aparecer-dibujo 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+    animation-delay: 0.15s;
+}
+
+.nombre-felicitaciones {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.calidad-felicitaciones {
+    margin-top: 2px;
+    color: var(--color-calidad);
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.detalle-felicitaciones {
+    margin-top: 10px;
+    color: #c5c2dd;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@keyframes entrar-felicitaciones {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes aparecer-dibujo {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes girar-rayos {
+    to { transform: rotate(360deg); }
+}
+
+.icono-felicitaciones {
+    font-size: 110px;
+    line-height: 1;
+}
+
+.nota-felicitaciones {
+    margin-top: 10px;
+    padding: 6px 8px;
+    color: #201f39;
+    background: var(--color-calidad);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/*---nivel y experiencia del jugador, al lado del perfil (experiencia.js)---*/
+
+.hud-nivel {
+    position: fixed;
+    top: 104px; /*abajo del boton del perfil (asi no se pisa con los recursos)*/
+    left: 20px;
+    z-index: 20000;
+    width: 150px;
+    padding: 6px 10px;
+    background: #201f39;
+    color: #ffffff;
+    border: 3px solid #100f20;
+}
+
+#nivel-jugador {
+    color: #7dff6b;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.barra-xp {
+    height: 10px;
+    margin: 4px 0 2px;
+    background: #100f20;
+    border: 2px solid #39365e;
+}
+
+#relleno-xp {
+    height: 100%;
+    width: 0;
+    background: #7dff6b;
+    transition: width 0.4s;
+}
+
+#texto-xp {
+    color: #c5c2dd;
+    font-size: 11px;
+}
+
+/*"+10 XP" que sube al ganar experiencia*/
+.flotante-xp {
+    position: absolute;
+    right: 8px;
+    top: 0;
+    color: #7dff6b;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0 #100f20;
+    pointer-events: none;
+    animation: flotar 1.3s ease-out forwards;
+}
+
+/*avatar elegido en el perfil (un monstruo) adentro del boton del perfil*/
+.perfil .sprite {
+    pointer-events: none;
+}
+
+/*---caja premium, cajas bloqueadas y garantia (tienda.js)---*/
+
+/*recuadro violeta: despues va la imagen o animacion de la caja premium*/
+.caja-premium .imagen-caja {
+    background: #b77bff;
+    border-color: #6b3cb0;
+}
+
+.tarjeta-caja.bloqueada {
+    opacity: 0.55;
+}
+
+.garantia {
+    color: #f9d849;
+    font-size: 11px;
+}
+
+.calidad-gemas { color: #5fe3ff; }
+
+#ventana .aclaracion {
+    margin: -2px 0 6px;
+    font-size: 12px;
+}
+
+.icono-cambio {
+    width: 48px;
+    text-align: center;
+    font-size: 26px;
+}
+
+/*---misiones: separador, cumplidas y cuenta regresiva (misiones.js)---*/
+
+.separador-misiones {
+    margin: 12px 0 6px;
+    color: #8d89b3;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/*lista para reclamar: se resalta*/
+.mision.cumplida {
+    border-color: #f9d849;
+}
+
+.mision .se-va {
+    display: block;
+    margin-top: 6px;
+    color: #7dff6b;
+    font-size: 12px;
+}

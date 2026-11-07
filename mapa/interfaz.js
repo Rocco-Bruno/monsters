@@ -1,4 +1,4 @@
-//=== LO QUE APARECE AL TOCAR UNA ESTRUCTURA (como en Dragon City) ===
+//=== LO QUE APARECE AL TOCAR UNA ESTRUCTURA ===
 //al tocar una estructura aparece abajo su nombre y sus botones (cada tipo tiene los suyos)
 //cada boton abre una ventanita en el medio de la pantalla
 //(se carga despues de mapa.js, monstruos.js y produccion.js)
@@ -139,6 +139,11 @@ function dibujarBarra() {
         vivo(vivosBarra, function () { ponerInsignia(huevos, hayHuevoListo(construida) ? "!" : 0); });
     }
 
+    //granja y hábitat: llenar al instante con gemas (produccion.js)
+    if (tipo.produce) {
+        botones.appendChild(botonAccion("💎", "Llenar", function () { abrirVentana(ventanaLlenar); }));
+    }
+
     barraSeleccion.appendChild(botones);
     barraSeleccion.classList.add("abierto");
 }
@@ -176,13 +181,13 @@ function tiramounstruos(habitat) {
     tira.className = "tira";
     let total = capacidad(habitat);
     for (let i = 0; i < total; i++) {
-        let dragon = habitat.monstruos[i];
+        let monstruo = habitat.monstruos[i];
         let hueco = document.createElement("div");
         hueco.className = "hueco";
-        if (dragon) {
-            hueco.appendChild(spriteBebe(dragon.color, 1.2));
-            hueco.insertAdjacentHTML("beforeend", "<small>Nv " + dragon.nivel + "</small>");
-            hueco.title = nombreDragon(dragon);
+        if (monstruo) {
+            hueco.appendChild(spriteBebe(monstruo.color, 1.2));
+            hueco.insertAdjacentHTML("beforeend", "<small>Nv " + monstruo.nivel + "</small>");
+            hueco.title = nombreMonstruo(monstruo);
         } else {
             hueco.classList.add("vacio");
             hueco.textContent = "+";
@@ -323,7 +328,7 @@ function ventanaMejorar(construida) {
         cambios.push(["🍖 Comida por segundo", produccionPorSegundo(construida), valorPorNivel(tipo.produccionBase, tipo.produccionPorNivel, despues)]);
     }
     if (tipo.nombre === "Hábitat") {
-        cambios.push(["🐲 mounstruos", capacidad(construida), capacidad(construida, despues)]);
+        cambios.push(["👾 mounstruos", capacidad(construida), capacidad(construida, despues)]);
     }
     if (tipo.nombre === "Incubadora") {
         cambios.push(["🥚 Huevos a la vez", capacidad(construida), capacidad(construida, despues)]);
@@ -376,6 +381,37 @@ function ventanaComida(granja) {
     return { titulo: "Comida de la granja", contenido: contenido };
 }
 
+//--- LLENAR CON GEMAS (granja y hábitat) ---
+function ventanaLlenar(construida) {
+    let icono = iconos[construida.tipo.produce];
+    let contenido = crearDiv("ventana-recurso");
+    contenido.innerHTML = '<div class="icono-grande">💎</div>'
+        + "<p>Llená " + (construida.tipo.nombre === "Granja" ? "la granja" : "el hábitat") + " al instante, sin esperar.</p>"
+        + '<p class="cantidad-grande"></p>';
+    let boton = botonGrande("", "verde", function () {
+        let falta = Math.floor(faltaParaLlenar(construida));
+        llenarConGemas(construida); //produccion.js
+        cerrarVentana();
+        mostrarFlotante(construida, "+" + falta + " " + icono);
+    });
+    let botones = crearDiv("botones-ventana");
+    botones.appendChild(botonGrande("Cancelar", "gris", cerrarVentana));
+    botones.appendChild(boton);
+    contenido.appendChild(botones);
+
+    vivo(vivosVentana, function () {
+        let costo = costoLlenar(construida);
+        let falta = Math.floor(faltaParaLlenar(construida));
+        contenido.querySelector(".cantidad-grande").innerHTML = costo === 0
+            ? (produccionPorSegundo(construida) <= 0 ? "No está produciendo nada" : "¡Ya está lleno!")
+            : "Faltan <b>" + icono + " " + falta + "</b>";
+        boton.textContent = costo === 0 ? "Llenar" : "Llenar 💎 " + costo;
+        boton.disabled = costo === 0 || recursos.gemas < costo;
+        boton.title = recursos.gemas < costo ? "Faltan gemas" : "";
+    });
+    return { titulo: "Llenar ya", contenido: contenido };
+}
+
 //junta la comida/oro y muestra "+25 🪙" subiendo arriba de la estructura
 function reclamarConEfecto(construida) {
     let cantidad = Math.floor(guardadoAhora(construida));
@@ -412,7 +448,7 @@ function ventanaHuevos(incubadora) {
         let nombre = "Huevo " + monstruos[huevo.color].nombre.toLowerCase();
         if (huevoListo(huevo)) {
             contenido.appendChild(filaMonstruo(spriteHuevo(huevo.color, 1.5), nombre, "¡Eclosionó!",
-                [crearBoton("Reclamar dragón 🐲", function () { reclamarBebe(incubadora, j); })]));
+                [crearBoton("Reclamar monstruo 👾", function () { reclamarBebe(incubadora, j); })]));
         } else {
             let acelerar = crearBoton("", function () { acelerarHuevo(huevo); }); //monstruos.js
             let fila = filaMonstruo(spriteHuevo(huevo.color, 1.5), nombre,
@@ -451,15 +487,15 @@ function ventanaHuevos(incubadora) {
 function ventanamounstruos(habitat) {
     let contenido = crearDiv("ventana-mounstruos");
     let total = capacidad(habitat);
-    let calidad = habitat.calidad ? calidades[habitat.calidad].nombre : "ninguna todavía (la decide el primer dragón)";
+    let calidad = habitat.calidad ? calidades[habitat.calidad].nombre : "ninguna todavía (la decide el primer monstruo)";
     contenido.innerHTML = '<p class="capacidad">mounstruos <b>' + habitat.monstruos.length + "/" + total + "</b> · Calidad: " + calidad + "</p>";
 
-    habitat.monstruos.forEach(function (dragon, i) {
+    habitat.monstruos.forEach(function (monstruo, i) {
         contenido.appendChild(filaMonstruo(
-            spriteBebe(dragon.color, 1.5),
-            nombreDragon(dragon),
-            nombreCalidad(dragon.color) + " · 🪙 " + oroDelDragon(dragon) + "/s",
-            [botonMejorarDragon(dragon, habitat), crearBoton("Sacar", function () { sacarDelHabitat(habitat, i); })]
+            spriteBebe(monstruo.color, 1.5),
+            nombreMonstruo(monstruo),
+            nombreCalidad(monstruo.color) + " · 🪙 " + oroDelMonstruo(monstruo) + "/s",
+            [botonMejorarMonstruo(monstruo, habitat), crearBoton("Sacar", function () { sacarDelHabitat(habitat, i); })]
         ));
     });
     for (let i = habitat.monstruos.length; i < total; i++) {
@@ -467,8 +503,8 @@ function ventanamounstruos(habitat) {
     }
 
     let lleno = habitat.monstruos.length >= total;
-    let compatibles = inventario.monstruos.filter(function (dragon) {
-        return !habitat.calidad || habitat.calidad === monstruos[dragon.color].calidad;
+    let compatibles = inventario.monstruos.filter(function (monstruo) {
+        return !habitat.calidad || habitat.calidad === monstruos[monstruo.color].calidad;
     });
     contenido.insertAdjacentHTML("beforeend", "<h3>Añadir desde el inventario</h3>");
     if (compatibles.length === 0) {
@@ -476,15 +512,15 @@ function ventanamounstruos(habitat) {
             + (habitat.calidad ? "de calidad " + calidades[habitat.calidad].nombre.toLowerCase() + " " : "")
             + "en el inventario.</p>");
     }
-    inventario.monstruos.forEach(function (dragon, i) {
-        if (compatibles.indexOf(dragon) === -1) {
+    inventario.monstruos.forEach(function (monstruo, i) {
+        if (compatibles.indexOf(monstruo) === -1) {
             return; //otra calidad no puede vivir acá
         }
         let ayuda = lleno ? "El hábitat está lleno, mejoralo para que entren más" : "";
         contenido.appendChild(filaMonstruo(
-            spriteBebe(dragon.color, 1.5),
-            nombreDragon(dragon),
-            nombreCalidad(dragon.color) + " · 🪙 " + oroDelDragon(dragon) + "/s",
+            spriteBebe(monstruo.color, 1.5),
+            nombreMonstruo(monstruo),
+            nombreCalidad(monstruo.color) + " · 🪙 " + oroDelMonstruo(monstruo) + "/s",
             [crearBoton("Añadir", function () { ponerEnHabitat(habitat, i); }, lleno, ayuda)]
         ));
     });

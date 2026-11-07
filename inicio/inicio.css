@@ -53,3 +53,99 @@
 #boton-play:hover {
     background: #ffffff;
 }
+
+/*---ventana para poner el nombre---*/
+
+#ventana-nombre {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(10, 9, 25, 0.7);
+}
+
+#ventana-nombre.abierto {
+    display: flex;
+}
+
+.caja-nombre {
+    width: 360px;
+    max-width: 100%;
+    padding: 24px;
+    background: #24223f;
+    color: #ffffff;
+    border: 3px solid #5145a5;
+    border-bottom-width: 7px;
+    font-family: "Courier New", monospace;
+    text-align: center;
+}
+
+.caja-nombre h2 {
+    color: #f9d849;
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.caja-nombre p {
+    color: #c5c2dd;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+#input-nombre {
+    width: 100%;
+    padding: 12px;
+    background: #17162b;
+    color: #ffffff;
+    border: 3px solid #39365e;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+}
+
+#input-nombre:focus {
+    border-color: #f9d849;
+}
+
+.caja-nombre .error {
+    min-height: 18px;
+    margin: 8px 0 4px;
+    color: #ff8a80;
+    font-size: 13px;
+}
+
+.botones-nombre {
+    display: flex;
+    gap: 10px;
+}
+
+.botones-nombre .boton {
+    flex: 1;
+    font-size: 16px;
+}
+
+#boton-empezar {
+    background: #f9d849;
+    color: #201f39;
+    border-color: #b18c24;
+}
+
+#boton-empezar:hover {
+    background: #ffffff;
+}
+
+/*---la pantalla aparece de a poco al venir de la intro---*/
+
+.pantalla-inicio {
+    animation: aparecer 0.6s ease-out;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

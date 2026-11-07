@@ -11,7 +11,14 @@
 
     <div id="mapa"></div>
 
-    <a href="../perfil jugador/perfil.html" class="perfil" title="Mi perfil">👤</a>
+    <a href="../perfil jugador/perfil.html" class="perfil" id="boton-perfil" title="Mi perfil">👤</a>
+
+    <!--nivel y barra de experiencia del jugador (experiencia.js)-->
+    <div class="hud-nivel" id="hud-nivel">
+        <span id="nivel-jugador">Nv 1</span>
+        <div class="barra-xp"><div id="relleno-xp"></div></div>
+        <span id="texto-xp"></span>
+    </div>
 
     <div class="recursos">
         <div class="recurso">🪙 <span id="oro"></span></div>
@@ -37,15 +44,21 @@
     <!--al tocar una estructura: su nombre y sus botones (interfaz.js)-->
     <div id="seleccion"></div>
 
+    <!--pantalla de felicitaciones al conseguir un huevo o un monstruo (felicitaciones.js)-->
+    <div id="felicitaciones"></div>
+
     <!--ventana que abren esos botones-->
     <div id="ventana-fondo">
         <div id="ventana"></div>
     </div>
 
+    <script src="datos-monstruos.js"></script>
     <script src="mapa.js"></script>
     <script src="monstruos.js"></script>
     <script src="produccion.js"></script>
     <script src="interfaz.js"></script>
+    <script src="felicitaciones.js"></script>
+    <script src="experiencia.js"></script>
     <script src="tienda.js"></script>
     <script src="misiones.js"></script>
     <script src="guardado.js"></script>

@@ -482,3 +482,121 @@ footer p {
         font-size: 21px;
     }
 }
+
+/*---mounstruos de la coleccion (perfil.js)---*/
+
+/*dibujo animado (igual que en el mapa)*/
+.sprite {
+    flex-shrink: 0;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    animation-name: animar-sprite;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animar-sprite {
+    from { background-position: 0 0; }
+    to { background-position: var(--fin) 0; }
+}
+
+/*los que todavia no conseguiste se ven como sombra*/
+.monstruo.bloqueado .sprite {
+    filter: brightness(0);
+    opacity: 0.35;
+    animation-play-state: paused;
+}
+
+.monstruo.conseguido {
+    border-color: #5145a5;
+}
+
+.fondo-comun { background: #2c2a48; }
+.fondo-raro { background: #1f3a5c; }
+.fondo-epico { background: #43275c; }
+.fondo-legendario { background: #5c4a17; }
+
+.monstruo .calidad-comun { color: #c5c2dd; }
+.monstruo .calidad-raro { color: #6bb8ff; }
+.monstruo .calidad-epico { color: #d78bff; }
+.monstruo .calidad-legendario { color: #f9d849; }
+
+.monstruo p.cantidad {
+    margin-top: 6px;
+    color: #9995b8;
+}
+
+/*los que no conseguiste: sombra aunque el dibujo tenga un filtro de color (lila, gris)*/
+.monstruo.bloqueado .sprite {
+    filter: brightness(0) !important;
+}
+
+/*---avatar y marcos (perfil.js)---*/
+
+.avatar .sprite {
+    animation-play-state: running;
+}
+
+.sin-avatar {
+    font-size: 60px;
+}
+
+.boton-avatar {
+    margin-top: 10px;
+    padding: 7px 10px;
+    border: none;
+    border-bottom: 4px solid #b18c24;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.boton-avatar:disabled,
+.boton-marco:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+}
+
+.fila-marco {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #39365e;
+    font-size: 12px;
+}
+
+.fila-marco:last-child {
+    border-bottom: none;
+}
+
+.nombre-marco {
+    flex: 1;
+}
+
+.muestra-marco {
+    width: 30px;
+    height: 30px;
+    background: #39316c;
+}
+
+.boton-marco {
+    padding: 7px 10px;
+    border: none;
+    border-bottom: 4px solid #b18c24;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/*cada marco: el borde del avatar (y la muestrita en la lista)*/
+.marco-basico { border: 4px solid #f9d849; }
+.marco-bronce { border: 4px solid #cd7f32; box-shadow: 0 0 0 3px #6b3d12; }
+.marco-plata { border: 4px solid #d9dde3; box-shadow: 0 0 0 3px #7c8592, 0 0 12px #d9dde3; }
+.marco-oro { border: 4px solid #ffd23f; box-shadow: 0 0 0 3px #a8780a, 0 0 18px #ffd23f; }
+.marco-arcoiris {
+    border: 4px solid transparent;
+    background:
+        linear-gradient(#39316c, #39316c) padding-box,
+        linear-gradient(135deg, #ff5a5a, #ffd23f, #7dff6b, #5fe3ff, #b77bff) border-box;
+    box-shadow: 0 0 16px #b77bff;
+}

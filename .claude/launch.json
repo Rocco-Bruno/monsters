@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "monsters",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "C:\\Users\\estca\\AppData\\Local\\Temp\\claude\\815c55b3ced52e1f\\e888db66-fbd4-4497-b40d-0579cb85caac\\scratchpad\\server.ps1"],
+      "port": 8765
+    }
+  ]
+}
