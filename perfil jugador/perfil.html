@@ -10,38 +10,17 @@
 
 <body>
 
-    <header>
-        <div class="header-derecha">
-            <a href="index.html" class="logo">MONSTER WORLD</a>
-            <!--vuelve al mapa del juego (la partida queda guardada)-->
-            <a href="../mapa/mapa.html" class="boton volver">⬅ VOLVER AL JUEGO</a>
-        </div>
-
-        <nav>
-            <a href="../index/index.html">Inicio</a>
-            <a href="../apartados de mounstros/mounstros.html">Monstruos</a>
-            <a href="../huevos/huevos.html">Huevos</a>
-            <a href="../coleccion/coleccion.html">Coleccion</a>
-            <a href="../apartados de huevos/huevos.html" class="activo">Mi perfil</a>
-        </nav>
-    </header>
+    <!--barra de arriba: volver al mapa (la partida queda guardada) y las gemas para comprar marcos-->
+    <div class="barra-superior">
+        <a href="../mapa/mapa.html" class="boton volver">⬅ VOLVER AL JUEGO</a>
+        <span class="gemas" id="gemas-perfil">💎 0</span>
+    </div>
 
     <main>
-
-        <section class="titulo-pagina">
-            <p class="subtitulo">/// ZONA DE ENTRENADORES</p>
-            <h1>MI PERFIL</h1>
-            <p>Este es tu espacio dentro de Monster World.</p>
-        </section>
 
         <section class="perfil">
 
             <div class="tarjeta-perfil">
-
-                <div class="banner-perfil">
-                    <span>PLAYER CARD</span>
-                    <span class="estado">JUGADOR</span>
-                </div>
 
                 <div class="datos-jugador">
 
@@ -49,11 +28,9 @@
                     <div class="avatar" id="avatar"></div>
 
                     <div class="informacion">
-                        <p class="etiqueta">ENTRENADOR</p>
+                        <!--el rango sale del nivel (ver rangos en mapa/experiencia.js)-->
+                        <p class="etiqueta" id="rango-perfil">Principiante</p>
                         <h2 id="nombre-jugador">MonsterPlayer</h2>
-                        <p class="descripcion">
-                            Explorador del mundo de los monstruos.
-                        </p>
                         <span class="nivel" id="nivel-perfil">NIVEL 01</span>
                     </div>
 
@@ -89,48 +66,19 @@
 
             </div>
 
-            <aside class="panel-lateral">
-
-                <div class="caja">
-                    <p class="subtitulo">/// INFORMACIÓN</p>
-                    <h3>DATOS DEL JUGADOR</h3>
-
-                    <div class="dato">
-                        <span>Usuario</span>
-                        <span id="dato-usuario">MonsterPlayer</span>
-                    </div>
-
-                    <div class="dato">
-                        <span>Rango</span>
-                        <span id="rango-perfil">Principiante</span>
-                    </div>
-
-                    <div class="dato">
-                        <span>Gemas</span>
-                        <span id="gemas-perfil">💎 0</span>
-                    </div>
-                </div>
-
-                <!--marcos para el avatar, se compran con gemas (perfil.js)-->
-                <div class="caja">
-                    <p class="subtitulo">/// PERSONALIZÁ TU PERFIL</p>
-                    <h3>MARCOS</h3>
-                    <p class="objetivo">Comprá marcos con gemas y elegí cuál usar. Para cambiar tu avatar, tocá "Usar de avatar" en un monstruo de tu colección.</p>
-                    <div id="lista-marcos"></div>
-                </div>
-
-            </aside>
+            <!--marcos para el avatar, se compran con gemas (perfil.js)-->
+            <div class="caja">
+                <h3>MARCOS</h3>
+                <p class="objetivo">Comprá marcos con gemas y elegí cuál usar. Para cambiar tu avatar, tocá "Usar de avatar" en un monstruo de tu colección.</p>
+                <div id="lista-marcos"></div>
+            </div>
 
         </section>
 
         <section class="coleccion">
 
             <div class="encabezado-coleccion">
-                <div>
-                    <p class="subtitulo">/// TUS CRIATURAS</p>
-                    <h2>MI COLECCIÓN</h2>
-                </div>
-
+                <h2>MI COLECCIÓN</h2>
                 <span class="contador" id="contador-coleccion">0 / 14</span>
             </div>
 
@@ -140,13 +88,6 @@
         </section>
 
     </main>
-
-    <footer>
-        <a href="../index/index.html" class="logo">MONSTER WORLD</a>
-        <p>UN MUNDO LLENO DE CRIATURAS</p>
-        <br>
-        <p>© 2026 Nebula games, todos los derechos reservados.</p>
-    </footer>
 
     <script src="../mapa/datos-monstruos.js"></script>
     <script src="../mapa/experiencia.js"></script>

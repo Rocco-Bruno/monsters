@@ -44,7 +44,6 @@ let marcos = [
 //--- nombre ---
 let nombre = datosJugador.nombre || "Sin nombre";
 document.getElementById("nombre-jugador").textContent = nombre;
-document.getElementById("dato-usuario").textContent = nombre;
 
 //--- nivel, rango y experiencia ---
 let nivelJugador = (partida.jugador || {}).nivel || 1;

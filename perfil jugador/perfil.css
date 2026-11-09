@@ -15,88 +15,33 @@ body {
     font-family: "Courier New", monospace;
 }
 
-/*---header---*/
+/*---barra de arriba (volver y gemas)---*/
 
-header {
-    padding: 22px 8%;
+.barra-superior {
+    padding: 18px 8%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-direction: row-reverse;
-    background: #201f39;
-    border-bottom: 3px solid #5145a5;
-}
-
-.logo {
-    color: #f9d849;
-    font-size: 23px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.header-derecha {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-/*boton para volver al mapa (arriba a la derecha)*/
-.header-derecha a {
-    white-space: nowrap; /*que el texto no se parta en varias lineas*/
+    gap: 15px;
 }
 
 .boton.volver {
     padding: 10px 16px;
+    white-space: nowrap; /*que el texto no se parta en varias lineas*/
 }
 
-nav {
-    display: flex;
-    gap: 28px;
-}
-
-nav a {
-    color: #d7d4ed;
-    text-decoration: none;
-    font-size: 13px;
-    transition: 0.3s;
-}
-
-nav a:hover,
-nav .activo {
-    color: #f9d849;
-}
-
-/*---titulo---*/
-
-.titulo-pagina {
-    padding: 55px 8% 35px;
-    text-align: center;
-    background: radial-gradient(circle at center, #39316c, #17162b 75%);
-}
-
-.subtitulo {
-    color: #f9d849;
-    font-size: 11px;
+.gemas {
+    padding: 8px 14px;
+    background: #24223f;
+    border: 3px solid #5145a5;
+    font-size: 14px;
     font-weight: bold;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
-}
-
-.titulo-pagina h1 {
-    font-size: 42px;
-    text-shadow: 4px 4px #5145a5;
-    margin-bottom: 15px;
-}
-
-.titulo-pagina > p:last-child {
-    color: #c5c2dd;
-    line-height: 1.7;
 }
 
 /*---contenedor de perfil---*/
 
 .perfil {
-    padding: 35px 8% 65px;
+    padding: 10px 8% 50px;
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 25px;
@@ -109,22 +54,6 @@ nav .activo {
     background: #24223f;
     border: 3px solid #5145a5;
     box-shadow: 7px 7px #100f20;
-}
-
-.banner-perfil {
-    padding: 15px 20px;
-    background: #302c55;
-    border-bottom: 2px solid #5145a5;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.estado {
-    color: #78e69a;
 }
 
 .datos-jugador {
@@ -166,12 +95,6 @@ nav .activo {
     margin-bottom: 10px;
 }
 
-.descripcion {
-    color: #bcb9d6;
-    font-size: 12px;
-    line-height: 1.7;
-    margin-bottom: 15px;
-}
 
 .nivel {
     display: inline-block;
@@ -244,13 +167,6 @@ nav .activo {
     text-align: center;
 }
 
-/*---panel lateral---*/
-
-.panel-lateral {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
 
 .caja {
     padding: 25px;
@@ -262,32 +178,6 @@ nav .activo {
     font-size: 15px;
     margin-bottom: 22px;
     line-height: 1.6;
-}
-
-.dato {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 14px 0;
-    border-bottom: 1px solid #39365e;
-    font-size: 11px;
-}
-
-.dato:last-child {
-    border-bottom: none;
-}
-
-.dato span:first-child {
-    color: #bcb9d6;
-}
-
-.dato span:last-child {
-    text-align: right;
-    overflow-wrap: anywhere;
-}
-
-.disponible {
-    color: #78e69a;
 }
 
 .objetivo {
@@ -405,26 +295,6 @@ nav .activo {
     font-size: 10px;
 }
 
-/*---footer---*/
-
-footer {
-    padding: 30px 20px;
-    text-align: center;
-    background: #100f20;
-    border-top: 3px solid #5145a5;
-}
-
-footer .logo {
-    display: inline-block;
-    margin-bottom: 12px;
-}
-
-footer p {
-    color: #9995b8;
-    font-size: 10px;
-    letter-spacing: 2px;
-}
-
 /*---responsive---*/
 
 @media (max-width: 900px) {
@@ -438,21 +308,6 @@ footer p {
 }
 
 @media (max-width: 600px) {
-    header {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    nav {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
-
-    .titulo-pagina h1 {
-        font-size: 34px;
-    }
-
     .datos-jugador {
         flex-direction: column;
         text-align: center;

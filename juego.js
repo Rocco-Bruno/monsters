@@ -26,106 +26,106 @@ let animaciones ={//acá cargamos todas las "stats" de cada animacion
         tiempo: 0, velocidad: 55, anchoframe: 0, altoframe: 0, loop: true
     },
     azulbebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 5,
         tiempo: 0, velocidad: 55, anchoframe: 0, altoframe: 0, loop: true
     },
     //AMARILLO/////////////////////////////////////////////////////////////////////////////////////
     amarillohuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     amarillobebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 8,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //VERDE/////////////////////////////////////////////////////////////////////////////////////
     verdehuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     verdebebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 0, //FALTA: todavia no tiene animacion de bebe
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //NARANJA/////////////////////////////////////////////////////////////////////////////////////
     naranjahuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     naranjabebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 0, //FALTA: todavia no tiene animacion de bebe
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //ROSA/////////////////////////////////////////////////////////////////////////////////////
     rosahuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     rosabebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 6,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //BLANCO/////////////////////////////////////////////////////////////////////////////////////
     blancohuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     blancobebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 8,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //NEGRO/////////////////////////////////////////////////////////////////////////////////////
     negrohuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     negrobebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 5,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //VIOLETA/////////////////////////////////////////////////////////////////////////////////////
     violetahuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     violetabebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 8,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //MARRON/////////////////////////////////////////////////////////////////////////////////////
     marronhuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     marronbebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 8,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //PLATEADO/////////////////////////////////////////////////////////////////////////////////////
     plateadohuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     plateadobebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 7,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //DORADO/////////////////////////////////////////////////////////////////////////////////////
     doradohuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     doradobebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 5,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     //RAINBOW/////////////////////////////////////////////////////////////////////////////////////
     rainbowhuevo:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 9,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
     rainbowbebe:{
-        imagen: new Image(), frameactual: 0, totalframes: ,
+        imagen: new Image(), frameactual: 0, totalframes: 7,
         tiempo: 0, velocidad: 5, anchoframe: 0, altoframe: 0, loop: true
     },
 
@@ -177,6 +177,7 @@ animaciones.rainbowbebe.imagen.src = "";
 
 
 
+/*IDEAS DE QUE DATOS TIENE CADA COSA (son notas, no codigo: por eso van comentadas)
 let mounstruos ={
     id, nombre, nivel, etapa de crecimiento,color, calidad, tiempo eclosion, oro xSegundo, info, tiempo de cruce (puede ser null), experiencia que da, prestigio
 }
@@ -196,6 +197,7 @@ let arbol = [nivel "tiempo de cruce", mounstruo1, mountruo2, resultado cruce,pos
 let incubadora = [nivel "capacidad de huevos", mountruo1-5, posicion en mapa,tamaño, info];//nivel 1 = 1 huevo, lv 2 = 2 huevos...
 
 let tienda = [habitats, mountruos, recursos];
+*/
 
 
 
