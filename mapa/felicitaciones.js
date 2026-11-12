@@ -24,7 +24,7 @@ function felicitar(tipo, color, origen, botonesExtra, nota) {
         detalle: (origen ? origen + " · " : "") +
             (esHuevo ? "Está en tu inventario, incubalo para que nazca." : "Está en tu inventario, ponelo en un hábitat."),
         nota: nota,
-        botonesExtra: botonesExtra,
+        botonesExtra: botonesExtra
     });
 }
 
