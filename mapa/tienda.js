@@ -17,8 +17,8 @@ let cajas = [
     {
         id: "misteriosa", nombre: "Caja misteriosa",
         moneda: "oro", precio: 500,
-        probabilidades: { comun: 79.9, raro: 15, epico: 5, legendario: 25 },
-        chanceGemas: 2, gemasPremio: 3,
+        probabilidades: { comun: 75, raro: 15, epico: 5, legendario: 2 },
+        chanceGemas: 3, gemasPremio: 5,
     },
     {
         id: "premium", nombre: "Caja premium",
