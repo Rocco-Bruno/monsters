@@ -13,7 +13,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    background: url("../assets/fondoplay.jpg") center / cover;
+    background: url("../assets/fondos/fondoplay.jpg") center / cover;
 }
 
 .menu {

@@ -821,8 +821,8 @@ body {
     line-height: 36px;
     text-align: center;
     font-size: 24px;
-    background: #ffffff;
-    border: 3px solid #f9d849;
+    background: #f9d849;
+    border: 3px solid #b8860b;
     border-bottom-width: 6px;
     cursor: pointer;
     pointer-events: auto; /*el marcador deja pasar los clicks, pero este cuadrito si se puede tocar*/
@@ -834,7 +834,7 @@ body {
 }
 
 .marcador .burbuja:hover {
-    background: #fff6c9;
+    background: #ffe680;
 }
 
 /*cuando ya llego al maximo (deja de juntar) el borde se pone rojo para que se note*/

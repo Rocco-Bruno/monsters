@@ -27,14 +27,14 @@ let jugador = { nivel: 1, xp: 0 };
 
 let estructuras = [
     {
-        nombre: "Incubadora", imagen: "../estructuras/incubadora.png", ancho: 150,
+        nombre: "Incubadora", imagen: "../assets/png/estructuras/incubadora.png", ancho: 150,
         info: "Acá se ponen los huevos para que eclosionen. Cuando el tiempo termina, reclamá al monstruo y va a tu inventario. Mejorándola podés incubar más huevos al mismo tiempo.",
         precio: 0, primeraGratis: true, maximo: 1, //es gratis y solo se puede tener una
         capacidadBase: 1, capacidadPorNivel: 1, //huevos a la vez: 1 a nivel 1, 2 a nivel 2...
         mejoraBase: 200, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
-        nombre: "Granja", imagen: "../estructuras/granja.png", ancho: 120,
+        nombre: "Granja", imagen: "../assets/png/estructuras/granja.png", ancho: 120,
         info: "Produce comida para mejorar a tus mounstruos. Se va guardando hasta llegar al máximo, así que pasá seguido a reclamarla.",
         precio: 100, primeraGratis: true,
         produce: "comida",
@@ -43,7 +43,7 @@ let estructuras = [
         mejoraBase: 100, mejoraMultiplicador: 1.8, nivelMaximo: 10,
     },
     {
-        nombre: "Hábitat", imagen: "../estructuras/habitat_terminado.png", ancho: 200,
+        nombre: "Hábitat", imagen: "../assets/png/estructuras/habitat_terminado.png", ancho: 200,
         info: "El hogar de tus mounstruos: ellos generan oro. Cada hábitat es de una calidad y solo pueden vivir ahí los mounstruos de esa misma calidad.",
         precio: 250, primeraGratis: true,
         produce: "oro",
@@ -53,7 +53,7 @@ let estructuras = [
         mejoraBase: 150, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
-        nombre: "Reservados", imagen: "../estructuras/reservados.png", ancho: 120,
+        nombre: "Reservados", imagen: "../assets/png/estructuras/reservados.png", ancho: 120,
         info: "Acá se cruzan dos mounstruos para conseguir uno nuevo.",
         //todavia no tiene mejoras (no tiene mejoraBase)
         precio: 150, //esta nunca es gratis
