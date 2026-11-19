@@ -137,7 +137,7 @@ body {
 
 .detalles {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     background: #1c1a32;
     border-top: 2px solid #5145a5;
 }
@@ -454,4 +454,55 @@ body {
         linear-gradient(#39316c, #39316c) padding-box,
         linear-gradient(135deg, #ff5a5a, #ffd23f, #7dff6b, #5fe3ff, #b77bff) border-box;
     box-shadow: 0 0 16px #b77bff;
+}
+
+/*---color del nombre (perfil.js)---*/
+/*los colores de cada uno estan en mapa/colores-nombre.css (los usa tambien el mapa)*/
+
+#lista-colores {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+    gap: 10px;
+}
+
+.opcion-color {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px 10px;
+    background: #1c1a32;
+    border: 2px solid #39365e;
+    font-family: inherit;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.opcion-color:hover:not(:disabled) {
+    border-color: #f9d849;
+}
+
+/*el que esta puesto se marca con borde amarillo*/
+.opcion-color.puesto {
+    border-color: #f9d849;
+    cursor: default;
+}
+
+.opcion-color:disabled:not(.puesto) {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.muestra-color {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.nombre-color {
+    font-size: 10px;
+}
+
+.precio-color {
+    font-size: 10px;
+    color: #f9d849;
 }

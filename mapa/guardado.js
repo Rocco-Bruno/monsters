@@ -6,7 +6,8 @@ let claveGuardado = "monsters-city-partida";
 
 //lo que se elige en el perfil: avatar = el color del monstruo que se usa de foto (null = ninguno)
 //marco = el marco puesto, marcos = los marcos comprados con gemas (ver perfil jugador/perfil.js)
-let perfilJugador = { avatar: null, marco: "basico", marcos: ["basico"] };
+//colorNombre = el color del nombre puesto, coloresNombre = los colores comprados con gemas
+let perfilJugador = { avatar: null, marco: "basico", marcos: ["basico"], colorNombre: "blanco", coloresNombre: ["blanco"] };
 
 //pone el monstruo elegido como avatar adentro del boton del perfil
 function mostrarAvatar() {
@@ -17,6 +18,22 @@ function mostrarAvatar() {
     } else {
         boton.textContent = "👤";
     }
+}
+
+//pone el nombre (el que se eligio al empezar, ver inicio/inicio.js) con su color al lado del perfil
+function mostrarNombre() {
+    let datos = null;
+    try {
+        datos = JSON.parse(sessionStorage.getItem("monsters-city-jugador"));
+    } catch (error) {
+        datos = null;
+    }
+    let span = document.createElement("span");
+    span.textContent = (datos && datos.nombre) || "Sin nombre";
+    span.className = "color-nombre-" + (perfilJugador.colorNombre || "blanco");
+    let caja = document.getElementById("nombre-hud");
+    caja.innerHTML = "";
+    caja.appendChild(span);
 }
 
 function guardarPartida() {
@@ -31,6 +48,7 @@ function guardarPartida() {
                 extra: {
                     nivel: c.nivel, guardado: c.guardado, ultimoCalculo: c.ultimoCalculo,
                     huevos: c.huevos, monstruos: c.monstruos, calidad: c.calidad,
+                    cruce: c.cruce, //Reservados (cruces.js)
                 },
             };
         }),
@@ -118,6 +136,7 @@ try {
 }
 
 cargarPartida();
+mostrarNombre(); //afuera de cargarPartida para que tambien salga en una partida nueva
 
 //por las dudas tambien guardamos al salir de la pagina (asi el oro de la granja sigue contando)
 window.addEventListener("beforeunload", guardarPartida);

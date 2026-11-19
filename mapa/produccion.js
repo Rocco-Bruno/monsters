@@ -91,6 +91,9 @@ function mejorarEstructura(construida) {
     acumular(construida);
     recursos.oro -= costoMejora(construida);
     construida.nivel++;
+    if (construida.tipo.nombre === "Reservados") {
+        acortarCruceEnCurso(construida, construida.nivel - 1); //cruces.js: el cruce que se esta haciendo termina antes
+    }
     if (construida.tipo.nombre === "Granja") {
         sumarProgreso("mejorasGranja"); //misiones.js
     }

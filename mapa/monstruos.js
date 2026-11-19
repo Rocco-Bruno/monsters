@@ -292,7 +292,8 @@ function agregarFila(lugares, cantidad, y, separacion, escala) {
 }
 
 function dibujarMarcador(construida) {
-    if (construida.tipo.nombre !== "Incubadora" && !construida.tipo.produce) {
+    let tieneMarcador = construida.tipo.nombre === "Incubadora" || construida.tipo.nombre === "Reservados";
+    if (!tieneMarcador && !construida.tipo.produce) {
         return;
     }
     if (!construida.marcador) {
@@ -312,6 +313,20 @@ function dibujarMarcador(construida) {
         agregarFila(lugares, construida.huevos.length, 48, 30, 1.2);
         construida.huevos.forEach(function (huevo, i) {
             let dibujo = spriteHuevo(huevo.color, lugares[i].escala);
+            dibujo.style.left = lugares[i].x + "px";
+            dibujo.style.top = lugares[i].y + "px";
+            marcador.appendChild(dibujo);
+        });
+        marcador.insertAdjacentHTML("beforeend", '<div class="aviso">!</div>');
+    }
+
+    //reservados: los dos mounstruos que se estan cruzando, uno al lado del otro (cruces.js)
+    //CAMBIÁ ACÁ donde se ven: 40 = abajo del centro de la imagen, 34 = separacion entre los dos
+    if (construida.tipo.nombre === "Reservados" && construida.cruce) {
+        let lugares = [];
+        agregarFila(lugares, 2, 40, 34, 1);
+        construida.cruce.padres.forEach(function (monstruo, i) {
+            let dibujo = spriteBebe(monstruo.color, lugares[i].escala);
             dibujo.style.left = lugares[i].x + "px";
             dibujo.style.top = lugares[i].y + "px";
             marcador.appendChild(dibujo);

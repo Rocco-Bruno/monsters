@@ -1,0 +1,15 @@
+/*=== COLORES DEL NOMBRE DEL JUGADOR ===*/
+/*se usan en el mapa (al lado del perfil) y en el perfil (la tarjeta y las muestras para comprar)*/
+/*CAMBIÁ ACÁ los colores (para agregar uno nuevo, copiá una línea y agregalo tambien en "coloresNombre" en perfil jugador/perfil.js)*/
+.color-nombre-blanco { color: #ffffff; }
+.color-nombre-rojo { color: #ff5a5a; }
+.color-nombre-verde { color: #7dff6b; }
+.color-nombre-celeste { color: #5fe3ff; }
+.color-nombre-rosa { color: #ff8fd6; }
+.color-nombre-dorado { color: #ffd23f; text-shadow: 0 0 8px #a8780a; }
+.color-nombre-arcoiris {
+    background: linear-gradient(90deg, #ff5a5a, #ffd23f, #7dff6b, #5fe3ff, #b77bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}

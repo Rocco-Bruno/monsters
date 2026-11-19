@@ -63,9 +63,9 @@ function redibujarInterfaz() {
     firma = calcularFirma();
 }
 
-//cosas que cambian solas y necesitan redibujar (por ahora: cuando un huevo termina de incubarse)
+//cosas que cambian solas y necesitan redibujar (cuando un huevo termina de incubarse o un cruce termina)
 function calcularFirma() {
-    return seleccionada ? seleccionada.huevos.map(huevoListo).join(",") : "";
+    return seleccionada ? seleccionada.huevos.map(huevoListo).join(",") + "|" + cruceListo(seleccionada) : "";
 }
 
 //se llama 4 veces por segundo (mapa.js)
@@ -102,6 +102,8 @@ function dibujarBarra() {
         barraSeleccion.appendChild(tiramounstruos(construida));
     } else if (tipo.nombre === "Incubadora") {
         barraSeleccion.appendChild(tiraHuevos(construida));
+    } else if (tipo.nombre === "Reservados") {
+        barraSeleccion.appendChild(tiraCruce(construida));
     }
 
     let botones = document.createElement("div");
@@ -137,6 +139,12 @@ function dibujarBarra() {
         let huevos = botonAccion("🥚", "Huevos", function () { abrirVentana(ventanaHuevos); });
         botones.appendChild(huevos);
         vivo(vivosBarra, function () { ponerInsignia(huevos, hayHuevoListo(construida) ? "!" : 0); });
+    }
+
+    if (tipo.nombre === "Reservados") {
+        let cruzar = botonAccion("💞", "Cruzar", function () { abrirVentana(ventanaCruce); });
+        botones.appendChild(cruzar);
+        vivo(vivosBarra, function () { ponerInsignia(cruzar, cruceListo(construida) ? "!" : 0); });
     }
 
     //granja y hábitat: llenar al instante con gemas (produccion.js)
@@ -227,6 +235,42 @@ function tiraHuevos(incubadora) {
     return envolverTira(tira, "Incubando " + incubadora.huevos.length + "/" + total);
 }
 
+//reservados: los dos padres y el huevo que va a salir
+function tiraCruce(reservados) {
+    let tira = document.createElement("div");
+    tira.className = "tira";
+    let cruce = reservados.cruce;
+    for (let i = 0; i < 2; i++) {
+        let hueco = document.createElement("div");
+        hueco.className = "hueco";
+        if (cruce) {
+            hueco.appendChild(spriteBebe(cruce.padres[i].color, 1.2));
+            hueco.insertAdjacentHTML("beforeend", "<small>Nv " + cruce.padres[i].nivel + "</small>");
+            hueco.title = nombreMonstruo(cruce.padres[i]);
+        } else {
+            hueco.classList.add("vacio");
+            hueco.textContent = "+";
+            hueco.title = "Elegir un mounstruo para cruzar";
+        }
+        hueco.onclick = function () { abrirVentana(ventanaCruce); };
+        tira.appendChild(hueco);
+    }
+    if (cruce) {
+        let huevo = document.createElement("div");
+        huevo.className = "hueco";
+        huevo.appendChild(spriteHuevo(cruce.resultado, 1.2));
+        let tiempo = document.createElement("small");
+        huevo.appendChild(tiempo);
+        vivo(vivosBarra, function () {
+            tiempo.textContent = cruceListo(reservados) ? "¡Listo!" : textoTiempo(faltaCruce(reservados).segundos);
+            huevo.classList.toggle("listo", cruceListo(reservados));
+        });
+        huevo.onclick = function () { abrirVentana(ventanaCruce); };
+        tira.appendChild(huevo);
+    }
+    return envolverTira(tira, cruce ? "Cruzando" : "Sin cruce");
+}
+
 function envolverTira(tira, texto) {
     let caja = document.createElement("div");
     caja.className = "sel-tira";
@@ -299,6 +343,9 @@ function ventanaInfo(construida) {
     } else if (tipo.nombre === "Incubadora") {
         datos.push("🥚 Incuba " + capacidad(construida) + (capacidad(construida) === 1 ? " huevo" : " huevos") + " a la vez");
         datos.push("Ocupados: " + construida.huevos.length + "/" + capacidad(construida));
+    } else if (tipo.nombre === "Reservados") {
+        datos.push("Cruza mounstruos desde nivel " + nivelMinimoCruce);
+        datos.push("⏱️ Los cruces tardan el " + Math.round(factorTiempoCruce(construida.nivel) * 100) + "% del tiempo");
     }
     if (datos.length > 0) {
         contenido.appendChild(crearDiv("lista-datos", datos.map(function (d) { return "<span>" + d + "</span>"; }).join("")));
@@ -332,6 +379,9 @@ function ventanaMejorar(construida) {
     }
     if (tipo.nombre === "Incubadora") {
         cambios.push(["🥚 Huevos a la vez", capacidad(construida), capacidad(construida, despues)]);
+    }
+    if (tipo.nombre === "Reservados") {
+        cambios.push(["⏱️ Tiempo de los cruces", Math.round(factorTiempoCruce(ahora) * 100) + "%", Math.round(factorTiempoCruce(despues) * 100) + "%"]);
     }
     if (tipo.maximoBase) {
         cambios.push([iconos[tipo.produce] + " Máximo guardado", maximoGuardado(construida), maximoGuardado(construida, despues)]);
@@ -525,4 +575,97 @@ function ventanamounstruos(habitat) {
         ));
     });
     return { titulo: "mounstruos del hábitat", contenido: contenido };
+}
+
+//--- CRUZAR (reservados): el cruce en curso, o elegir dos mounstruos para cruzar (cruces.js) ---
+function ventanaCruce(reservados) {
+    let contenido = crearDiv("ventana-cruce");
+    let cruce = reservados.cruce;
+
+    //hay un cruce en curso: los padres, el huevo y cuanto falta
+    if (cruce) {
+        let nombres = cruce.padres.map(function (m) { return monstruos[m.color].nombre.toLowerCase(); }).join(" + ");
+        let nombreHuevo = "Huevo " + monstruos[cruce.resultado].nombre.toLowerCase();
+        contenido.innerHTML = '<p class="capacidad">Cruzando <b>' + nombres + "</b></p>";
+        cruce.padres.forEach(function (monstruo) {
+            contenido.appendChild(filaMonstruo(spriteBebe(monstruo.color, 1.5), nombreMonstruo(monstruo), "Se está cruzando", []));
+        });
+        if (cruceListo(reservados)) {
+            contenido.appendChild(filaMonstruo(spriteHuevo(cruce.resultado, 1.5), nombreHuevo, "¡Listo!",
+                [crearBoton("Reclamar huevo 🥚", function () { reclamarCruce(reservados); })]));
+        } else {
+            let acelerar = crearBoton("", function () { acelerarCruce(reservados); });
+            let fila = filaMonstruo(spriteHuevo(cruce.resultado, 1.5), nombreHuevo,
+                '<span class="cuenta"></span><span class="barra-tiempo"><span class="relleno"></span></span>', [acelerar]);
+            contenido.appendChild(fila);
+            vivo(vivosVentana, function () {
+                let falta = faltaCruce(reservados);
+                fila.querySelector(".cuenta").textContent = "Termina en " + textoTiempo(falta.segundos);
+                fila.querySelector(".relleno").style.width = (falta.avance * 100) + "%";
+                let costo = costoAcelerarCruce(reservados);
+                acelerar.textContent = "Acelerar 💎 " + costo;
+                acelerar.disabled = recursos.gemas < costo;
+                acelerar.title = recursos.gemas < costo ? "Faltan gemas" : "Termina el cruce ya";
+            });
+        }
+        return { titulo: "Reservados", contenido: contenido };
+    }
+
+    //no hay cruce: elegir dos
+    let disponibles = monstruosParaCruzar();
+    elegidosCruce = elegidosCruce.filter(function (m) {
+        return disponibles.some(function (d) { return d.monstruo === m; });
+    });
+    contenido.innerHTML = '<p class="capacidad">Elegí <b>2 mounstruos</b> (desde nivel ' + nivelMinimoCruce + ")</p>";
+
+    for (let i = 0; i < 2; i++) {
+        let monstruo = elegidosCruce[i];
+        if (monstruo) {
+            contenido.appendChild(filaMonstruo(spriteBebe(monstruo.color, 1.5), nombreMonstruo(monstruo), nombreCalidad(monstruo.color),
+                [crearBoton("Quitar", function () { quitarDeCruce(monstruo); })]));
+        } else {
+            contenido.appendChild(crearDiv("fila-monstruo lugar-libre", "Elegí un mounstruo de abajo"));
+        }
+    }
+
+    if (elegidosCruce.length === 2) {
+        let color1 = elegidosCruce[0].color;
+        let color2 = elegidosCruce[1].color;
+        let receta = recetaDe(color1, color2);
+        //el tiempo depende del huevo que sale (sin receta puede ser cualquiera de los dos: se muestra el mas largo)
+        let posibles = receta ? [receta.resultado] : [color1, color2];
+        let segundos = Math.max.apply(null, posibles.map(function (c) { return segundosCruce(c, reservados.nivel); }));
+        contenido.appendChild(crearDiv("lista-datos",
+            "<span>🥚 " + textoResultado(color1, color2) + "</span><span>⏱️ Tarda " + textoTiempo(segundos) + "</span>"));
+        let botones = crearDiv("botones-ventana");
+        botones.appendChild(botonGrande("Empezar cruce 💞", "verde", function () { empezarCruce(reservados); }));
+        contenido.appendChild(botones);
+    }
+
+    contenido.insertAdjacentHTML("beforeend", "<h3>Tus mounstruos</h3>");
+    if (disponibles.length === 0) {
+        contenido.insertAdjacentHTML("beforeend", '<p class="vacio">No tenés mounstruos.</p>');
+    }
+    for (let dato of disponibles) {
+        let monstruo = dato.monstruo;
+        if (elegidosCruce.indexOf(monstruo) !== -1) {
+            continue; //ya esta elegido arriba
+        }
+        let bajoNivel = motivoNoPuedeCruzar(monstruo);
+        let motivo = bajoNivel || (elegidosCruce.length >= 2 ? "Ya elegiste 2" : null);
+        contenido.appendChild(filaMonstruo(spriteBebe(monstruo.color, 1.5), nombreMonstruo(monstruo),
+            nombreCalidad(monstruo.color) + " · " + (dato.habitat ? "en un hábitat" : "en el inventario"),
+            [crearBoton(bajoNivel ? "Nv " + nivelMinimoCruce + " mín." : "Elegir",
+                function () { elegirParaCruce(monstruo); }, motivo, motivo)]));
+    }
+
+    //las recetas, para saber que cruzar (se cambian en cruces.js)
+    contenido.insertAdjacentHTML("beforeend", "<h3>Recetas</h3>");
+    let lista = crearDiv("lista-cambios");
+    for (let receta of recetasCruce) {
+        lista.insertAdjacentHTML("beforeend", "<div><span>" + monstruos[receta.padres[0]].nombre + " + " + monstruos[receta.padres[1]].nombre
+            + '</span><b><span class="flecha">➜</span> ' + monstruos[receta.resultado].nombre + " (" + nombreCalidad(receta.resultado) + ")</b></div>");
+    }
+    contenido.appendChild(lista);
+    return { titulo: "Reservados", contenido: contenido };
 }

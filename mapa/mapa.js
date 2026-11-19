@@ -37,6 +37,9 @@ let estructuras = [
         nombre: "Granja", imagen: "../assets/png/estructuras/granja.png", ancho: 120,
         info: "Produce comida para mejorar a tus mounstruos. Se va guardando hasta llegar al máximo, así que pasá seguido a reclamarla.",
         precio: 100, primeraGratis: true,
+        //CAMBIÁ ACÁ cuantas granjas se pueden tener segun el nivel del jugador:
+        //1 y 1 = la primera a nivel 1, la segunda a nivel 2, la tercera a nivel 3... (una más por cada nivel)
+        nivelPrimero: 1, nivelCadaOtro: 1,
         produce: "comida",
         produccionBase: 1, produccionPorNivel: 1,
         maximoBase: 100, maximoPorNivel: 100,
@@ -49,14 +52,19 @@ let estructuras = [
         produce: "oro",
         maximoBase: 200, maximoPorNivel: 200,
         capacidadBase: 2, capacidadPorNivel: 1,
-        nivelPrimero: 1, nivelCadaOtro: 3,
+        //CAMBIÁ ACÁ cuantos hábitats se pueden tener segun el nivel del jugador:
+        //1 y 2 = el primero a nivel 1, el segundo a nivel 3, el tercero a nivel 5... (uno más cada 2 niveles)
+        nivelPrimero: 1, nivelCadaOtro: 2,
         mejoraBase: 150, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
     {
         nombre: "Reservados", imagen: "../assets/png/estructuras/reservados.png", ancho: 120,
-        info: "Acá se cruzan dos mounstruos para conseguir uno nuevo.",
-        //todavia no tiene mejoras (no tiene mejoraBase)
+        info: "Acá se cruzan dos mounstruos (desde nivel " + nivelMinimoCruce + ") para conseguir un huevo nuevo. Mientras se cruzan no generan oro. Mejorándola los cruces tardan menos.",
         precio: 150, //esta nunca es gratis
+        maximo: 1, //CAMBIÁ ACÁ cuantas se pueden construir
+        //CAMBIÁ ACÁ el precio de las mejoras y el nivel maximo
+        //(cuanto tiempo le saca cada mejora y los tiempos de cruce estan en cruces.js)
+        mejoraBase: 300, mejoraMultiplicador: 2, nivelMaximo: 5,
     },
 ];
 
@@ -304,6 +312,7 @@ function ponerEstructura(tipo, x, y, extra, imagen) {
         tipo: tipo, imagen: imagen, x: x, y: y,
         nivel: 1, guardado: 0, ultimoCalculo: Date.now(),
         huevos: [], monstruos: [], calidad: null, //huevos: los que se estan incubando { color, fin }
+        cruce: null, //Reservados: el cruce que se esta haciendo (cruces.js)
     };
     Object.assign(construida, extra);
     construidas.push(construida);
@@ -358,6 +367,7 @@ document.onkeydown = function (evento) {
 //4 veces por segundo: los huevos van contando y la comida/oro va subiendo
 setInterval(function () {
     actualizarIncubadoras(); //monstruos.js
+    actualizarReservados(); //cruces.js
     actualizarBurbujas(); //produccion.js
     actualizarInterfaz(); //interfaz.js
 }, 250);

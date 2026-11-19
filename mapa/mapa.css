@@ -56,15 +56,45 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f9d849;
-    border: 3px solid #b18c24;
+    /*mismo recuadro que los botones de tienda, misiones e inventario*/
+    background: #201f39;
+    border: 3px solid #100f20;
     border-bottom-width: 7px;
     font-size: 32px;
     text-decoration: none;
 }
 
-.perfil:hover {
-    background: #ffffff;
+.perfil:hover,
+.nombre-hud:hover {
+    background: #5145a5;
+}
+
+/*el nombre al lado del perfil (el color esta en colores-nombre.css)*/
+.nombre-hud {
+    position: fixed;
+    top: 20px;
+    left: 94px; /*20 del perfil + 64 de ancho + 10 de separacion*/
+    z-index: 20000;
+    height: 64px;
+    /*como mucho 220px, pero en pantallas angostas mas corto para que no se pise con el oro/comida/gemas del medio*/
+    max-width: clamp(90px, 50vw - 310px, 220px);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    background: #201f39;
+    border: 3px solid #100f20;
+    border-bottom-width: 7px;
+    box-sizing: border-box;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/*si el nombre es muy largo se corta con "..."*/
+.nombre-hud span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .recursos {

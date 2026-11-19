@@ -18,7 +18,7 @@ let partida = leer(clavePartida); //null si todavia no se jugo
 let hayPartida = !!(partida && partida.recursos);
 partida = partida || {};
 let coleccion = partida.coleccion || {};
-let perfil = Object.assign({ avatar: null, marco: "basico", marcos: ["basico"] }, partida.perfil);
+let perfil = Object.assign({ avatar: null, marco: "basico", marcos: ["basico"], colorNombre: "blanco", coloresNombre: ["blanco"] }, partida.perfil);
 
 function guardarPerfil() {
     if (!hayPartida) {
@@ -41,9 +41,70 @@ let marcos = [
     { id: "arcoiris", nombre: "Arcoíris", precio: 50 },
 ];
 
+//=== COLORES DEL NOMBRE: CAMBIÁ ACÁ ===
+//precio en gemas (0 = gratis); el color de cada uno está en perfil.css (color-nombre-...)
+//para agregar uno: copiá una línea acá y agregá su clase en perfil.css
+let coloresNombre = [
+    { id: "blanco", nombre: "Blanco", precio: 0 },
+    { id: "rojo", nombre: "Rojo", precio: 5 },
+    { id: "verde", nombre: "Verde", precio: 5 },
+    { id: "celeste", nombre: "Celeste", precio: 10 },
+    { id: "rosa", nombre: "Rosa", precio: 10 },
+    { id: "dorado", nombre: "Dorado", precio: 20 },
+    { id: "arcoiris", nombre: "Arcoíris", precio: 40 },
+];
+
 //--- nombre ---
 let nombre = datosJugador.nombre || "Sin nombre";
 document.getElementById("nombre-jugador").textContent = nombre;
+
+function mostrarColorNombre() {
+    document.getElementById("nombre-jugador").className = "color-nombre-" + perfil.colorNombre;
+}
+
+//cada color es un cuadrito con "Aa" pintado; abajo dice el precio, "Usar" o "Puesto"
+function mostrarColoresNombre() {
+    let lista = document.getElementById("lista-colores");
+    lista.innerHTML = "";
+    let gemas = (partida.recursos || {}).gemas || 0;
+    for (let color of coloresNombre) {
+        let comprado = perfil.coloresNombre.indexOf(color.id) !== -1;
+        let puesto = perfil.colorNombre === color.id;
+        let boton = document.createElement("button");
+        boton.className = "opcion-color" + (puesto ? " puesto" : "");
+        boton.innerHTML = '<span class="muestra-color color-nombre-' + color.id + '">Aa</span>'
+            + '<span class="nombre-color">' + color.nombre + "</span>"
+            + '<span class="precio-color">' + (puesto ? "✔ Puesto" : comprado ? "Usar" : "💎 " + color.precio) + "</span>";
+        if (puesto) {
+            boton.disabled = true;
+        } else if (comprado) {
+            boton.onclick = function () { usarColorNombre(color); };
+        } else {
+            boton.disabled = !hayPartida || gemas < color.precio;
+            boton.title = !hayPartida ? "Empezá a jugar primero" : gemas < color.precio ? "Faltan gemas" : "Comprar";
+            boton.onclick = function () { comprarColorNombre(color); };
+        }
+        lista.appendChild(boton);
+    }
+}
+
+function comprarColorNombre(color) {
+    if (!hayPartida || partida.recursos.gemas < color.precio) {
+        return;
+    }
+    partida.recursos.gemas -= color.precio;
+    perfil.coloresNombre.push(color.id);
+    usarColorNombre(color); //al comprarlo ya se lo pone
+    mostrarGemas();
+    mostrarMarcos(); //con menos gemas pueden quedar marcos sin poder comprarse
+}
+
+function usarColorNombre(color) {
+    perfil.colorNombre = color.id;
+    guardarPerfil();
+    mostrarColorNombre();
+    mostrarColoresNombre();
+}
 
 //--- nivel, rango y experiencia ---
 let nivelJugador = (partida.jugador || {}).nivel || 1;
@@ -67,8 +128,6 @@ function dosCifras(numero) {
 let totalMonstruos = Object.values(coleccion).reduce(function (suma, cantidad) { return suma + cantidad; }, 0);
 document.getElementById("total-monstruos").textContent = dosCifras(totalMonstruos);
 document.getElementById("total-huevos").textContent = dosCifras((partida.progreso || {}).huevos || 0);
-document.getElementById("total-logros").textContent = dosCifras((partida.progreso || {}).misiones || 0);
-
 //--- avatar (con el marco puesto) ---
 function mostrarAvatar() {
     let avatar = document.getElementById("avatar");
@@ -119,6 +178,7 @@ function comprarMarco(marco) {
     guardarPerfil();
     mostrarGemas();
     mostrarMarcos();
+    mostrarColoresNombre(); //con menos gemas pueden quedar colores sin poder comprarse
     mostrarAvatar();
 }
 
@@ -178,4 +238,6 @@ function mostrarColeccion() {
 
 mostrarAvatar();
 mostrarMarcos();
+mostrarColorNombre();
+mostrarColoresNombre();
 mostrarColeccion();
