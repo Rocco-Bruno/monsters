@@ -1,5 +1,5 @@
 //=== CRUCES (estructura "Reservados") ===
-//se eligen 2 mounstruos, se cruzan durante un tiempo y al final dan un huevo
+//se eligen 2 mounstruos (un macho y una hembra), se cruzan durante un tiempo y al final dan un huevo
 //mientras se cruzan no estan en el hábitat (no generan oro); al reclamar el huevo vuelven a su hábitat
 //(se carga antes de mapa.js porque la info de la estructura usa nivelMinimoCruce; la estructura se define en "estructuras" en mapa.js)
 
@@ -122,7 +122,17 @@ function motivoNoPuedeCruzar(monstruo) {
     if (monstruo.nivel < nivelMinimoCruce) {
         return "Necesita nivel " + nivelMinimoCruce;
     }
+    //solo se cruzan macho con hembra
+    let otro = elegidosCruce.find(function (m) { return m !== monstruo; });
+    if (otro && otro.genero === monstruo.genero) {
+        return "Hace falta " + (monstruo.genero === "macho" ? "una hembra" : "un macho");
+    }
     return null;
+}
+
+//true si son un macho y una hembra
+function generosCompatibles(monstruo1, monstruo2) {
+    return monstruo1.genero !== monstruo2.genero;
 }
 
 function elegirParaCruce(monstruo) {
@@ -163,7 +173,7 @@ function sacarParaCruce(monstruo) {
 function empezarCruce(reservados) {
     let disponibles = monstruosParaCruzar().map(function (d) { return d.monstruo; });
     elegidosCruce = elegidosCruce.filter(function (m) { return disponibles.indexOf(m) !== -1; });
-    if (reservados.cruce || elegidosCruce.length !== 2) {
+    if (reservados.cruce || elegidosCruce.length !== 2 || !generosCompatibles(elegidosCruce[0], elegidosCruce[1])) {
         return;
     }
     let padres = elegidosCruce;

@@ -3,7 +3,7 @@
 
 //lo que tiene guardado el jugador
 //huevos: el color de cada huevo (ej: "rojo")
-//monstruos: cada monstruo es { color: "rojo", nivel: 1 } (igual en los hábitats)
+//monstruos: cada monstruo es { color: "rojo", nivel: 1, genero: "macho" } (igual en los hábitats)
 let inventario = { huevos: [], monstruos: [] };
 
 //todos los mounstruos que consiguio el jugador en la partida (se ven en el perfil)
@@ -17,9 +17,27 @@ function registrarMonstruo(color) {
     return esNuevo;
 }
 
-//nombre que se muestra, ej: "Monstruo rojo · Nv 2"
+//=== GÉNERO: CAMBIÁ ACÁ ===
+//cada mounstruo nace macho o hembra (50% y 50%); para cruzar hace falta un macho y una hembra (cruces.js)
+let generos = {
+    macho: { nombre: "Macho", simbolo: "♂" },
+    hembra: { nombre: "Hembra", simbolo: "♀" },
+};
+
+function generoAlAzar() {
+    return Math.random() < 0.5 ? "macho" : "hembra";
+}
+
+//nombre que se muestra, ej: "Monstruo rojo ♂ · Nv 2"
 function nombreMonstruo(monstruo) {
-    return "Monstruo " + monstruos[monstruo.color].nombre.toLowerCase() + " · Nv " + monstruo.nivel;
+    let simbolo = generos[monstruo.genero] ? " " + generos[monstruo.genero].simbolo : "";
+    return "Monstruo " + monstruos[monstruo.color].nombre.toLowerCase() + simbolo + " · Nv " + monstruo.nivel;
+}
+
+//pinta los ♂ y ♀ de un texto (♂ celeste, ♀ rosa; los colores estan en mapa.css)
+function pintarGeneros(texto) {
+    return texto.replace(/♂/g, '<span class="genero genero-macho" title="Macho">♂</span>')
+        .replace(/♀/g, '<span class="genero genero-hembra" title="Hembra">♀</span>');
 }
 
 //una fila con dibujo, nombre y botones (se usa en el inventario y en los paneles)
@@ -29,7 +47,7 @@ function filaMonstruo(dibujo, titulo, subtitulo, botones) {
     fila.appendChild(dibujo);
     let texto = document.createElement("div");
     texto.className = "texto";
-    texto.innerHTML = "<b>" + titulo + "</b><span>" + subtitulo + "</span>";
+    texto.innerHTML = "<b>" + pintarGeneros(titulo) + "</b><span>" + subtitulo + "</span>";
     fila.appendChild(texto);
     let acciones = document.createElement("div");
     acciones.className = "acciones"; //los botones van uno abajo del otro
@@ -185,7 +203,8 @@ function reclamarBebe(incubadora, j) {
     if (!huevo || !huevoListo(huevo)) {
         return;
     }
-    inventario.monstruos.push({ color: huevo.color, nivel: 1 });
+    let genero = generoAlAzar();
+    inventario.monstruos.push({ color: huevo.color, nivel: 1, genero: genero });
     let esNuevo = registrarMonstruo(huevo.color);
     incubadora.huevos.splice(j, 1);
     dibujarMarcador(incubadora);
@@ -195,7 +214,7 @@ function reclamarBebe(incubadora, j) {
     let xp = xpPor.eclosionar[monstruos[huevo.color].calidad];
     let xpTotal = xp + (esNuevo ? xpPor.descubrir : 0); //nacer + (si es nuevo) descubrirlo
     let nota = (esNuevo ? textoDescubrimiento(huevo.color) + " · " : "") + "+" + xpTotal + " XP"; //experiencia.js
-    felicitar("monstruo", huevo.color, "Nació en la incubadora", [], nota); //felicitaciones.js
+    felicitar("monstruo", huevo.color, "Nació en la incubadora · " + generos[genero].simbolo + " " + generos[genero].nombre, [], nota); //felicitaciones.js
     if (esNuevo) {
         premiarDescubrimiento(huevo.color);
     }
@@ -331,7 +350,8 @@ function dibujarMarcador(construida) {
             dibujo.style.top = lugares[i].y + "px";
             marcador.appendChild(dibujo);
         });
-        marcador.insertAdjacentHTML("beforeend", '<div class="aviso">!</div>');
+        //los corazones animados arriba de la cueva mientras se cruzan (se esconden cuando el huevo esta listo, ver mapa.css)
+        marcador.insertAdjacentHTML("beforeend", '<div class="corazones"></div><div class="aviso">!</div>');
     }
 
     //habitat: cada monstruo en su lugar, sin pisarse

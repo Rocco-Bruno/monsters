@@ -12,16 +12,18 @@
 //    dentro de la calidad que sale, todos los huevos de esa calidad tienen la misma chance (los exclusivos no salen)
 //garantia = cada cuantas cajas sin legendario sale uno seguro (si no tiene, no hay garantia)
 //chanceGemas / gemasPremio = % de chance de que en vez de un huevo salgan gemas, y cuantas
-//imagen: por ahora es un recuadro de color; despues se puede poner la imagen o animacion de la caja
+//imagen = el dibujo animado de la caja en assets/png/cajas/ (tira horizontal de cuadros), frames = cuantos cuadros tiene
 let cajas = [
     {
         id: "misteriosa", nombre: "Caja misteriosa",
+        imagen: "luckyblock-amarillo.png", frames: 8,
         moneda: "oro", precio: 500,
         probabilidades: { comun: 75, raro: 15, epico: 5, legendario: 2 },
         chanceGemas: 3, gemasPremio: 5,
     },
     {
         id: "premium", nombre: "Caja premium",
+        imagen: "luckyblock-violeta.png", frames: 8,
         moneda: "gemas", precio: 10, nivelRequerido: 3,
         probabilidades: { raro: 70, epico: 25, legendario: 5 },
         garantia: 20,
@@ -126,8 +128,16 @@ function faltanParaGarantia(caja) {
 //la tarjeta de una caja: imagen, nombre, probabilidades y boton para abrirla
 function tarjetaCaja(caja, i) {
     let tarjeta = crearDiv("tarjeta-caja caja-" + caja.id);
-    //ACÁ va a ir la imagen o animacion de la caja (por ahora un recuadro de color)
-    tarjeta.appendChild(crearDiv("imagen-caja"));
+    //la imagen animada de la caja (si no tiene imagen queda un recuadro de color)
+    let imagen = crearDiv("imagen-caja");
+    if (caja.imagen) {
+        imagen.classList.add("con-imagen");
+        imagen.style.backgroundImage = 'url("../assets/png/cajas/' + caja.imagen + '")';
+        imagen.style.setProperty("--frames", caja.frames);
+        imagen.style.animationTimingFunction = "steps(" + caja.frames + ")";
+        imagen.style.animationDuration = (caja.frames * 120) + "ms";
+    }
+    tarjeta.appendChild(imagen);
 
     let texto = crearDiv("texto-caja", "<b>" + caja.nombre + "</b>");
     let lista = crearDiv("probabilidades");

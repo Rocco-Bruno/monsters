@@ -26,7 +26,7 @@ let monstruos = {
     azul: { nombre: "Azul", calidad: "comun", huevo: { src: "blue/huevo-blue.png", frames: 9 }, bebe: { src: "blue/blue.png", frames: 5 } },
     amarillo: { nombre: "Amarillo", calidad: "comun", huevo: { src: "yellow/amarillo-huevo.png", frames: 9 }, bebe: { src: "yellow/yellow-bebe.png", frames: 8 } },
     verde: { nombre: "Verde", calidad: "comun", huevo: { src: "green/huevo-green.png", frames: 9 }, bebe: { src: "green/mounstruo-bebe-verde.png", frames: 7 } },
-    naranja: { nombre: "Naranja", calidad: "comun", huevo: { src: "orange/huevo-orange.png", frames: 9 }, bebe: { src: "orange/orange-bebe.png", frames: 8 } },
+    naranja: { nombre: "Naranja", calidad: "comun", huevo: { src: "orange/huevo-orange.png", frames: 9 }, bebe: { src: "orange/bebe-naranja.png", frames: 7 } },
     //raros
     negro: { nombre: "Negro", calidad: "raro", huevo: { src: "black/huevo-black.png", frames: 9 }, bebe: { src: "black/black.png", frames: 5 } },
     blanco: { nombre: "Blanco", calidad: "raro", huevo: { src: "white/white-huevo.png", frames: 9 }, bebe: { src: "white/blanco-bebe.png", frames: 8 } },

@@ -61,6 +61,7 @@ function guardarPartida() {
         siguientePrincipal: siguientePrincipal,
         garantias: garantias, //tienda.js
         perfil: perfilJugador,
+        guia: guia, //en que paso va la guía de Wini (guia.js)
     };
     try {
         sessionStorage.setItem(claveGuardado, JSON.stringify(partida));
@@ -69,9 +70,16 @@ function guardarPartida() {
     }
 }
 
-//en partidas viejas los mounstruos eran solo el color ("rojo"), ahora son { color, nivel }
+//en partidas viejas los mounstruos eran solo el color ("rojo"), ahora son { color, nivel, genero }
+//(a los que no tenian genero se les sortea uno)
 function comoMonstruo(monstruo) {
-    return typeof monstruo === "string" ? { color: monstruo, nivel: 1 } : monstruo;
+    if (typeof monstruo === "string") {
+        monstruo = { color: monstruo, nivel: 1 };
+    }
+    if (!monstruo.genero) {
+        monstruo.genero = generoAlAzar(); //monstruos.js
+    }
+    return monstruo;
 }
 
 function cargarPartida() {
@@ -96,6 +104,9 @@ function cargarPartida() {
         if (tipo) {
             let extra = guardada.extra || {};
             extra.monstruos = (extra.monstruos || []).map(comoMonstruo);
+            if (extra.cruce) {
+                extra.cruce.padres = extra.cruce.padres.map(comoMonstruo);
+            }
             delete extra.ultimoReclamo; //dato de partidas viejas que ya no se usa
             if (extra.huevo !== undefined) {
                 //antes la incubadora tenia un solo huevo, ahora tiene una lista
@@ -109,6 +120,11 @@ function cargarPartida() {
     Object.assign(jugador, partida.jugador);
     Object.assign(garantias, partida.garantias);
     Object.assign(perfilJugador, partida.perfil);
+    if (partida.guia) {
+        Object.assign(guia, partida.guia); //guia.js
+    } else if (construidas.length > 0) {
+        guia.terminada = true; //partida de antes de que existiera Wini: ya sabe jugar
+    }
     if (partida.misiones) {
         misiones = partida.misiones;
         siguientePrincipal = partida.siguientePrincipal || 0;

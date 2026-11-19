@@ -616,7 +616,7 @@ function ventanaCruce(reservados) {
     elegidosCruce = elegidosCruce.filter(function (m) {
         return disponibles.some(function (d) { return d.monstruo === m; });
     });
-    contenido.innerHTML = '<p class="capacidad">Elegí <b>2 mounstruos</b> (desde nivel ' + nivelMinimoCruce + ")</p>";
+    contenido.innerHTML = '<p class="capacidad">Elegí <b>un macho ' + pintarGeneros("♂") + " y una hembra " + pintarGeneros("♀") + '</b> (desde nivel ' + nivelMinimoCruce + ")</p>";
 
     for (let i = 0; i < 2; i++) {
         let monstruo = elegidosCruce[i];
@@ -651,11 +651,17 @@ function ventanaCruce(reservados) {
         if (elegidosCruce.indexOf(monstruo) !== -1) {
             continue; //ya esta elegido arriba
         }
-        let bajoNivel = motivoNoPuedeCruzar(monstruo);
-        let motivo = bajoNivel || (elegidosCruce.length >= 2 ? "Ya elegiste 2" : null);
+        let noPuede = motivoNoPuedeCruzar(monstruo);
+        let motivo = noPuede || (elegidosCruce.length >= 2 ? "Ya elegiste 2" : null);
+        let textoBoton = "Elegir";
+        if (monstruo.nivel < nivelMinimoCruce) {
+            textoBoton = "Nv " + nivelMinimoCruce + " mín.";
+        } else if (noPuede) {
+            textoBoton = "Mismo género";
+        }
         contenido.appendChild(filaMonstruo(spriteBebe(monstruo.color, 1.5), nombreMonstruo(monstruo),
             nombreCalidad(monstruo.color) + " · " + (dato.habitat ? "en un hábitat" : "en el inventario"),
-            [crearBoton(bajoNivel ? "Nv " + nivelMinimoCruce + " mín." : "Elegir",
+            [crearBoton(textoBoton,
                 function () { elegirParaCruce(monstruo); }, motivo, motivo)]));
     }
 

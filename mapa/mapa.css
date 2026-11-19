@@ -414,6 +414,48 @@ body {
     to { transform: translateY(-8px); }
 }
 
+/*el bosque de afuera del mapa (decoracion.js): queda fijo detras de todo y no se puede tocar*/
+.bosque {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/*arboles y piedras alrededor del rombo (decoracion.js): solo de adorno, el click pasa al mapa*/
+.decoracion {
+    position: absolute;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
+/*corazones arriba de Reservados mientras los mounstruos se cruzan (monstruos.js)*/
+/*dibujo: assets/png/estructuras/corazon-reservados.png = 11 cuadros de 32x32, a 5 por segundo*/
+/*CAMBIÁ ACÁ: left/top = donde se ven (respecto del centro de Reservados), width/height = tamaño*/
+.marcador .corazones {
+    position: absolute;
+    left: -42px;
+    top: -82px;
+    width: 64px;
+    height: 64px;
+    background: url("../assets/png/estructuras/corazon-reservados.png") no-repeat 0 0;
+    background-size: 704px 64px; /*11 cuadros x 64px*/
+    image-rendering: pixelated;
+    animation: animar-corazones 2.2s steps(11) infinite;
+}
+
+@keyframes animar-corazones {
+    to { background-position: -704px 0; }
+}
+
+/*cuando el huevo ya esta listo se dejan de ver los corazones (aparece el !)*/
+.marcador.listo .corazones {
+    display: none;
+}
+
 
 /*---estructura seleccionada (brilla)---*/
 
@@ -802,6 +844,35 @@ body {
     border-bottom-width: 6px;
 }
 
+/*con el dibujo del lucky block (tienda.js): tira horizontal de cuadros animada*/
+.tarjeta-caja .imagen-caja.con-imagen {
+    background-color: transparent;
+    border: none;
+    background-repeat: no-repeat;
+    background-size: calc(var(--frames) * 80px) 80px;
+    image-rendering: pixelated;
+    animation-name: animar-caja;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animar-caja {
+    from { background-position: 0 0; }
+    to { background-position: calc(var(--frames) * -80px) 0; }
+}
+
+/*el simbolo de genero de los mounstruos (monstruos.js)*/
+.genero {
+    font-weight: bold;
+}
+
+.genero-macho {
+    color: #6ec6ff;
+}
+
+.genero-hembra {
+    color: #ff8fc8;
+}
+
 .texto-caja {
     flex: 1;
     display: flex;
@@ -1108,4 +1179,167 @@ body {
     margin-top: 6px;
     color: #7dff6b;
     font-size: 12px;
+}
+
+
+/*---Wini, la guía (guia.js)---*/
+
+#guia {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 35000; /*arriba de las ventanas, abajo de las felicitaciones*/
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    pointer-events: none; /*solo se tocan Wini y el globo, no el espacio vacio*/
+}
+
+#guia .wini {
+    flex-shrink: 0;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    image-rendering: pixelated;
+    cursor: pointer;
+    pointer-events: auto;
+    animation-name: animar-wini;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animar-wini {
+    from { background-position: 0 0; }
+    to { background-position: var(--fin) 0; }
+}
+
+/*con la guía terminada Wini queda mas chico en la esquina*/
+#guia.terminada .wini {
+    transform: scale(0.7);
+    transform-origin: bottom right;
+}
+
+.globo-guia {
+    display: none;
+    position: relative;
+    width: 340px;
+    max-width: calc(100vw - 150px);
+    margin-bottom: 40px;
+    padding: 14px 16px 12px;
+    background: #fffbe9;
+    color: #201f39;
+    border: 3px solid #201f39;
+    border-bottom-width: 6px;
+    font-size: 15px;
+    line-height: 1.4;
+    pointer-events: auto;
+}
+
+.globo-guia.abierto {
+    display: block;
+    animation: aparecer-guia 0.25s ease-out;
+}
+
+@keyframes aparecer-guia {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+/*la colita del globo apuntando a Wini*/
+.globo-guia::after {
+    content: "";
+    position: absolute;
+    right: -14px;
+    bottom: 14px;
+    border: 7px solid transparent;
+    border-left-color: #201f39;
+}
+
+.globo-guia p {
+    margin-bottom: 10px;
+}
+
+.cuenta-guia {
+    display: block;
+    margin-bottom: 4px;
+    color: #8a86b0;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.minimizar-guia {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: #8a86b0;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.minimizar-guia:hover {
+    color: #201f39;
+}
+
+.botones-guia {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.boton-guia {
+    padding: 7px 12px;
+    background: #f9d849;
+    color: #201f39;
+    border: 2px solid #b18c24;
+    border-bottom-width: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boton-guia:hover {
+    filter: brightness(1.08);
+}
+
+.boton-guia.gris {
+    background: #dcd9ee;
+    border-color: #8a86b0;
+}
+
+.esperando-guia {
+    color: #8a86b0;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.temas-guia {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+/*lo que la guía le marca al jugador para que toque*/
+.guia-marcado {
+    animation: brillar-guia 1s ease-in-out infinite alternate;
+}
+
+@keyframes brillar-guia {
+    from { box-shadow: 0 0 0 3px #f9d849; }
+    to { box-shadow: 0 0 0 3px #f9d849, 0 0 18px 6px #f9d849; }
+}
+
+/*las estructuras del mapa son imagenes con fondo transparente: brillan con el contorno del dibujo*/
+img.guia-marcado {
+    animation: brillar-guia-imagen 1s ease-in-out infinite alternate;
+}
+
+@keyframes brillar-guia-imagen {
+    from { filter: drop-shadow(0 0 2px #f9d849) drop-shadow(0 0 2px #f9d849); }
+    to { filter: drop-shadow(0 0 6px #f9d849) drop-shadow(0 0 10px #f9d849); }
 }
