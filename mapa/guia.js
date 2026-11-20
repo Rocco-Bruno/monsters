@@ -1,8 +1,9 @@
 //=== WINI, LA GUÍA ===
-//Wini aparece abajo a la derecha y le enseña a jugar al jugador paso a paso.
+//Wini le enseña a jugar al jugador paso a paso: habla en un diálogo a lo largo de la parte de abajo
+//de la pantalla y él está parado arriba del diálogo, a la izquierda.
 //Hay pasos que se pasan con un botón (solo explican) y pasos que esperan a que el jugador haga algo
-//(ej: construir la incubadora): esos avanzan solos cuando lo hace.
-//Cuando termina la guía, Wini se queda chiquito en la esquina: tocándolo se pueden volver a leer las explicaciones.
+//(ej: construir la incubadora): esos avanzan solos cuando lo hace. Una flecha señala lo que hay que tocar.
+//Cuando termina la guía, Wini se queda en la esquina de abajo a la izquierda: tocándolo se pueden volver a leer las explicaciones.
 //(se carga antes de guardado.js, que guarda en que paso va)
 
 //en que paso va la guía (se guarda con la partida)
@@ -11,7 +12,7 @@ let guia = { paso: 0, terminada: false, minimizada: false };
 
 //=== CAMBIÁ ACÁ EL DIBUJO DE WINI ===
 //tira horizontal de cuadros de 32x32 en assets/png/guia/
-let dibujoWini = { src: "../assets/png/guia/wini.png", frames: 11, porSegundo: 6, tamano: 96 };
+let dibujoWini = { src: "../assets/png/guia/wini.png", frames: 11, porSegundo: 6, tamano: 128 };
 
 
 //=== AYUDAS PARA LOS PASOS ===
@@ -239,29 +240,52 @@ function botonGuia(texto, clase, accion) {
     return boton;
 }
 
+//el texto va a la izquierda y los botones a la derecha del diálogo
+function cajaDeTexto(html) {
+    let caja = document.createElement("div");
+    caja.className = "texto-guia";
+    caja.innerHTML = html;
+    globoGuia.appendChild(caja);
+    return caja;
+}
+
 function dibujarGuia() {
     globoGuia.innerHTML = "";
+    dibujarGuiaAdentro();
+    //Wini se para arriba del diálogo, y la ventana y la barra de la estructura se corren para que no los tape
+    let abierto = globoGuia.classList.contains("abierto");
+    cajaGuia.classList.toggle("con-dialogo", abierto);
+    acomodarAlDialogo();
+}
 
-    //guía terminada: Wini chiquito; al tocarlo, los temas para volver a leer
+function acomodarAlDialogo() {
+    let abierto = globoGuia.classList.contains("abierto");
+    let alto = abierto ? globoGuia.offsetHeight : 0;
+    cajaGuia.style.setProperty("--alto-dialogo", alto + "px");
+    document.documentElement.style.setProperty("--alto-guia", (abierto ? alto + 10 : 0) + "px");
+}
+window.addEventListener("resize", acomodarAlDialogo);
+
+function dibujarGuiaAdentro() {
+    //guía terminada: Wini en la esquina; al tocarlo, los temas para volver a leer
     if (guia.terminada) {
         cajaGuia.classList.add("terminada");
         marcar(null);
         globoGuia.classList.toggle("abierto", temaAbierto !== null);
+        let botones = document.createElement("div");
+        botones.className = "botones-guia";
         if (temaAbierto === -1) {
-            globoGuia.insertAdjacentHTML("beforeend", "<p>¿Qué querés que te explique?</p>");
+            let texto = cajaDeTexto("<p>¿Qué querés que te explique?</p>");
             let lista = document.createElement("div");
             lista.className = "temas-guia";
             temasGuia.forEach(function (tema, i) {
                 lista.appendChild(botonGuia(tema.titulo, "", function () { temaAbierto = i; dibujarGuia(); }));
             });
-            globoGuia.appendChild(lista);
-            globoGuia.appendChild(botonGuia("Cerrar", "gris", function () { temaAbierto = null; dibujarGuia(); }));
+            texto.appendChild(lista);
+            botones.appendChild(botonGuia("Cerrar", "gris", function () { temaAbierto = null; dibujarGuia(); }));
+            globoGuia.appendChild(botones);
         } else if (temaAbierto !== null) {
-            for (let i of temasGuia[temaAbierto].pasos) {
-                globoGuia.insertAdjacentHTML("beforeend", "<p>" + textoDePaso(i) + "</p>");
-            }
-            let botones = document.createElement("div");
-            botones.className = "botones-guia";
+            cajaDeTexto(temasGuia[temaAbierto].pasos.map(function (i) { return "<p>" + textoDePaso(i) + "</p>"; }).join(""));
             botones.appendChild(botonGuia("Otros temas", "gris", function () { temaAbierto = -1; dibujarGuia(); }));
             botones.appendChild(botonGuia("Gracias", "", function () { temaAbierto = null; dibujarGuia(); }));
             globoGuia.appendChild(botones);
@@ -273,8 +297,8 @@ function dibujarGuia() {
     globoGuia.classList.toggle("abierto", !guia.minimizada);
     let paso = pasosGuia[guia.paso];
     globoGuia.insertAdjacentHTML("beforeend", '<span class="cuenta-guia">' + (guia.paso + 1) + "/" + pasosGuia.length + "</span>"
-        + '<button class="minimizar-guia" title="Esconder">—</button>'
-        + "<p>" + textoDePaso(guia.paso) + "</p>");
+        + '<button class="minimizar-guia" title="Esconder">—</button>');
+    cajaDeTexto("<p>" + textoDePaso(guia.paso) + "</p>");
     globoGuia.querySelector(".minimizar-guia").onclick = function () {
         guia.minimizada = true;
         dibujarGuia();
@@ -294,6 +318,38 @@ function dibujarGuia() {
     globoGuia.appendChild(botones);
     marcar(elementoAMarcar(paso));
 }
+
+
+//=== FLECHA QUE SEÑALA LO QUE HAY QUE TOCAR ===
+//se pone al lado de lo marcado: a la derecha si está pegado a la izquierda de la pantalla, a la izquierda si está
+//pegado a la derecha, abajo si está muy arriba y si no arriba. Se acomoda en cada cuadro (por si se mueve el mapa)
+let flechaGuia = document.createElement("div");
+flechaGuia.className = "flecha-guia";
+document.body.appendChild(flechaGuia);
+
+(function seguirMarcado() {
+    requestAnimationFrame(seguirMarcado);
+    let borde = elementoMarcado && elementoMarcado.isConnected ? elementoMarcado.getBoundingClientRect() : null;
+    if (!borde || borde.width === 0 || borde.height === 0) {
+        flechaGuia.classList.remove("visible");
+        return;
+    }
+    let separacion = 14;
+    let x, y, giro;
+    if (borde.right < 260) {
+        x = borde.right + separacion; y = borde.top + borde.height / 2; giro = 90;
+    } else if (borde.left > window.innerWidth - 260) {
+        x = borde.left - separacion; y = borde.top + borde.height / 2; giro = -90;
+    } else if (borde.top < 120) {
+        x = borde.left + borde.width / 2; y = borde.bottom + separacion; giro = 180;
+    } else {
+        x = borde.left + borde.width / 2; y = borde.top - separacion; giro = 0;
+    }
+    flechaGuia.style.left = x + "px";
+    flechaGuia.style.top = y + "px";
+    flechaGuia.style.setProperty("--giro", giro + "deg");
+    flechaGuia.classList.add("visible");
+})();
 
 function irAPaso(numero) {
     guia.paso = numero;

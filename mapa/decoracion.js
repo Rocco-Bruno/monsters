@@ -1,22 +1,26 @@
-//=== DECORACIÓN: árboles y piedras repartidos al azar alrededor del rombo ===
+//=== DECORACIÓN: árboles, flores y piedras repartidos al azar alrededor del rombo ===
 //son solo de adorno: no se pueden tocar y no ocupan lugar para construir (todo queda fuera del rombo)
 //(se carga despues de mapa.js porque usa "mapa" y "rombo")
 
 //=== CAMBIÁ ACÁ ===
-//src = dibujo en assets/png/decoracion/ (32x32, un solo cuadro)
-//tamano = de cuantos pixeles se dibuja en el mapa (puede variar un poco, ver "variacion")
+//src = dibujo en assets/png/decoracion/ (un solo cuadro)
+//tamano = de cuantos pixeles se dibuja en el mapa el cuadro entero (puede variar un poco, ver "variacion")
+//   arboles y flores son de 40x40: 120 = cada pixel se ve de 3x3. Las piedras son de 32x32: 80 = 2.5x
 //peso = que tan seguido sale comparado con los demas (2 = sale el doble que uno con 1)
 let decoraciones = [
-    { src: "arbol1.png", tamano: 80, peso: 3 },
-    { src: "arbol2.png", tamano: 80, peso: 3 },
-    { src: "arbol3.png", tamano: 80, peso: 3 },
-    { src: "piedra1.png", tamano: 56, peso: 2 },
-    { src: "piedra2.png", tamano: 56, peso: 2 },
+    { src: "arbol1.png", tamano: 120, peso: 3 },
+    { src: "arbol2.png", tamano: 120, peso: 3 },
+    { src: "arbol3.png", tamano: 120, peso: 3 },
+    { src: "flor1.png", tamano: 100, peso: 2 },
+    { src: "flor2.png", tamano: 100, peso: 2 },
+    { src: "flor3.png", tamano: 100, peso: 2 },
+    { src: "piedra1.png", tamano: 80, peso: 2 },
+    { src: "piedra2.png", tamano: 80, peso: 2 },
 ];
 let carpetaDecoracion = "../assets/png/decoracion/";
 let cantidadDecoracion = 70;   //cuantos dibujos se intentan poner
 let variacion = 0.25;          //0.25 = cada uno puede ser hasta 25% mas grande o mas chico
-let separacionDecoracion = 0.7; //que tan juntos pueden estar (1 = sin pisarse nada, menos = se pisan un poco)
+let separacionDecoracion = 0.55; //que tan juntos pueden estar (1 = sin pisarse nada, menos = se pisan un poco)
 let margenRombo = 10;          //pixeles de aire entre los dibujos y el borde del rombo
 //la "semilla": con el mismo numero siempre sale el mismo bosque. Cambialo para probar otra distribucion
 let semillaDecoracion = 7;
@@ -98,7 +102,7 @@ ponerDecoracion();
 //el bosque se arma en una grilla: en cada cuadrito puede haber un dibujo (siempre el mismo en el mismo lugar)
 
 //CAMBIÁ ACÁ
-let cuadritoBosque = 70;      //tamaño de cada cuadrito de la grilla (mas chico = bosque mas tupido)
+let cuadritoBosque = 90;      //tamaño de cada cuadrito de la grilla (mas chico = bosque mas tupido)
 let chanceBosque = 0.75;      //chance de que un cuadrito tenga dibujo (1 = todos)
 
 let imagenesDecoracion = decoraciones.map(function (decoracion) {

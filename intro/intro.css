@@ -38,3 +38,20 @@ body {
     font-size: 13px;
     letter-spacing: 1px;
 }
+
+/*---que hacer doble click (o arrastrar) no seleccione texto ni imagenes---*/
+body {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+img {
+    -webkit-user-drag: none;
+}
+
+/*donde se escribe (ej: el nombre) si se puede seleccionar*/
+input,
+textarea {
+    user-select: text;
+    -webkit-user-select: text;
+}
